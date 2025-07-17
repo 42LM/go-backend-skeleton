@@ -1,8 +1,12 @@
 pkgname: "mock"
-dir: "{{.InterfaceDir}}/mock"
 filename: mock.go
 packages:
   go-backend-skeleton/app/internal/db:
     config:
+      dir: "{{.InterfaceDir}}/mock"
+      all: true
+  go-backend-skeleton/app/internal/svc:
+    config:
+      dir: "{{.InterfaceDir}}/mock"
       all: true
 
