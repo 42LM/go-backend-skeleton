@@ -9,7 +9,6 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/dynamodb v1.44.0
 	github.com/aws/aws-xray-sdk-go v1.8.5
 	github.com/aws/smithy-go v1.22.4
-	github.com/infopark/dxhub/go-tools/dynamodb v0.0.0-20250716111746-d75e0408380b
 	github.com/spf13/cobra v1.9.1
 	github.com/stretchr/testify v1.10.0
 )

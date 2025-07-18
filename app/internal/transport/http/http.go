@@ -15,7 +15,7 @@ type HandlerConfig struct {
 func NewHandler(config HandlerConfig) http.Handler {
 	mux := http.NewServeMux()
 
-	mux.Handle("/none", handlerFindNone(config.Svc))
+	mux.Handle("GET /none", handlerFindNone(config.Svc))
 
 	return mux
 }
