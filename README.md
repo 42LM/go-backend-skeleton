@@ -1,22 +1,26 @@
 # go-backend-skeleton
 This repository acts as a template for a simple go backend with the focus on not using too much external dependencies.
 
-It utilizes [Cobra](https://github.com/spf13/cobra) to create a cli command to run the server.
+It utilizes:
+* [spf13/cobra](https://github.com/spf13/cobra) to create a cli command to run the server
+* [vektra/mockery](https://github.com/vektra/mockery) to generate mocks from interfaces
+* [stretchr/testify](https://github.com/stretchr/testify) for simpler testing in general
+* [42lm/muxify](https://github.com/42LM/muxify) for a better handling of the default `*http.ServeMux`
 
-## Quickstart
+## Development
 Copy `.envrc.example`
 ```sh
 cp .envrc.example .envrc
 ```
 > [!TIP]
-> Use [direnv](https://github.com/direnv/direnv) to load and unload environment variables depending on the current directory.
+> Use a tool like [direnv](https://github.com/direnv/direnv) to load and unload environment variables depending on the current directory.
 
-Install tools
+Install tools (currently only mockery)
 ```sh
 go install tool
 ```
 
-Setup DB
+Setup DB (currently only dynamodb)
 ```sh
 docker compose up -d
 ```
@@ -40,14 +44,8 @@ curl localhost:8080/v1/none
 curl localhost:8080/v1/msg/1
 ```
 
-## Development
-To install the tools needed for development just run
-```sh
-go install tool
-```
-
-### Mockery
-Denerate mocks from interfaces with [mockery](https://vektra.github.io/mockery/latest/installation/).
+### Generate mocks
+Generate mocks from interfaces with [mockery](https://vektra.github.io/mockery/latest/installation/).
 ```sh
 mockery
 ```
