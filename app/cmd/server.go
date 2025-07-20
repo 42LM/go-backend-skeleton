@@ -33,7 +33,12 @@ var serverCmd = &cobra.Command{
 			return fmt.Errorf("could not parse `port` flag: %w", err)
 		}
 
-		logger := slog.Default()
+		// create a smol schlogger
+		jsonHandler := slog.NewJSONHandler(os.Stdout, &slog.HandlerOptions{
+			AddSource: true,
+			Level:     slog.LevelDebug,
+		})
+		logger := slog.New(jsonHandler)
 
 		dbLogger := logger.With("layer", "database")
 		svcLogger := logger.With("layer", "service")
