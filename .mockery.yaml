@@ -10,6 +10,11 @@ packages:
       filename: mock_repo_none.go
       dir: "app/internal/db/mock"
       all: true
+  go-backend-skeleton/app/internal/transport/http/httpmsg:
+    config:
+      filename: mock_svc_msg.go
+      dir: "app/internal/svc/mock"
+      all: true
   go-backend-skeleton/app/internal/transport/http/httpnone:
     config:
       filename: mock_svc_none.go

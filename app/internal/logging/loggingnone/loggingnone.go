@@ -34,16 +34,16 @@ func (l *loggingRepo) Find(ctx context.Context) string {
 
 // svc level logging
 
-type loggingService struct {
+type loggingSvc struct {
 	next   httpnone.NoneSvc
 	logger *slog.Logger
 }
 
-func NewLoggingService(next httpnone.NoneSvc, logger *slog.Logger) httpnone.NoneSvc {
-	return &loggingService{next: next, logger: logger}
+func NewLoggingSvc(next httpnone.NoneSvc, logger *slog.Logger) httpnone.NoneSvc {
+	return &loggingSvc{next: next, logger: logger}
 }
 
-func (l *loggingService) FindNone(ctx context.Context) string {
+func (l *loggingSvc) FindNone(ctx context.Context) string {
 	defer func(begin time.Time) {
 		l.logger.Info(
 			"FindNone",

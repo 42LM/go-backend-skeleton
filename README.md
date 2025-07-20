@@ -21,6 +21,11 @@ Setup DB
 docker compose up -d
 ```
 
+Run tests
+```
+go test ./...
+```
+
 Run server
 ```sh
 go run main.go server

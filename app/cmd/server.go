@@ -4,10 +4,14 @@ import (
 	"fmt"
 	"log/slog"
 	"net/http"
+	"os"
 	"time"
 
+	"go-backend-skeleton/app/internal/db/dynamodb"
 	"go-backend-skeleton/app/internal/db/none"
+	"go-backend-skeleton/app/internal/logging/loggingmsg"
 	"go-backend-skeleton/app/internal/logging/loggingnone"
+	"go-backend-skeleton/app/internal/svc/svcmsg"
 	"go-backend-skeleton/app/internal/svc/svcnone"
 	internalhttp "go-backend-skeleton/app/internal/transport/http"
 
@@ -31,16 +35,30 @@ var serverCmd = &cobra.Command{
 
 		logger := slog.Default()
 
-		noneRepo := none.NewNoneRepository()
-		loggedRepo := loggingnone.NewLoggingRepo(noneRepo, logger.With("layer", "repo"))
+		dbLogger := logger.With("layer", "database")
+		svcLogger := logger.With("layer", "service")
+		dynamodbClient, err := makeDynamoDBClient(dbLogger)
+		if err != nil {
+			return err
+		}
 
+		noneRepo := none.NewNoneRepository()
+		loggedNoneRepo := loggingnone.NewLoggingRepo(noneRepo, dbLogger)
 		noneSvc := svcnone.New(&svcnone.NoneSvcConfig{
-			NoneRepo: loggedRepo,
+			NoneRepo: loggedNoneRepo,
 		})
-		loggedService := loggingnone.NewLoggingService(noneSvc, logger.With("layer", "service"))
+		loggedNoneSvc := loggingnone.NewLoggingSvc(noneSvc, svcLogger)
+
+		msgRepo := dynamodb.NewMsgRepository(dynamodbClient, os.Getenv("DATABASE_AWS_DYNAMODB_MSG_TABLE"), dbLogger)
+		loggedMsgRepo := loggingmsg.NewLoggingRepo(msgRepo, dbLogger)
+		msgSvc := svcmsg.New(&svcmsg.MsgSvcConfig{
+			MsgRepo: loggedMsgRepo,
+		})
+		loggedMsgSvc := loggingmsg.NewLoggingSvc(msgSvc, svcLogger)
 
 		handler := internalhttp.NewHandler(internalhttp.HandlerConfig{
-			NoneSvc: loggedService,
+			NoneSvc: loggedNoneSvc,
+			MsgSvc:  loggedMsgSvc,
 		})
 
 		httpServer := http.Server{
@@ -58,4 +76,12 @@ var serverCmd = &cobra.Command{
 
 		return nil
 	},
+}
+
+func makeDynamoDBClient(logger *slog.Logger) (*dynamodb.DynamoDBClient, error) {
+	return dynamodb.NewDynamoDBClient(
+		os.Getenv("DATABASE_AWS_DYNAMODB_ENDPOINT"),
+		os.Getenv("AWS_REGION"),
+		logger,
+	)
 }
