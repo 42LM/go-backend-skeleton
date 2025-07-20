@@ -7,10 +7,8 @@ import (
 	dbmock "go-backend-skeleton/app/internal/db/mock"
 	"go-backend-skeleton/app/internal/svc/svcnone"
 
-	// TODO: fix imports
-	testifymock "github.com/stretchr/testify/mock"
-
 	"github.com/stretchr/testify/assert"
+	testifymock "github.com/stretchr/testify/mock"
 )
 
 func Test_FindNone(t *testing.T) {

@@ -9,10 +9,8 @@ import (
 	svcmock "go-backend-skeleton/app/internal/svc/mock"
 	"go-backend-skeleton/app/internal/transport/http"
 
-	// TODO: fix imports
-	testifymock "github.com/stretchr/testify/mock"
-
 	"github.com/stretchr/testify/assert"
+	testifymock "github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
 )
 
