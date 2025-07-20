@@ -57,7 +57,7 @@ func Test_NoneHandler_FindNone(t *testing.T) {
 			defer srv.Close()
 
 			cli := nethttp.DefaultClient
-			req, err := nethttp.NewRequest(tc.httpMethod, srv.URL+"/none", nil)
+			req, err := nethttp.NewRequest(tc.httpMethod, srv.URL+"/v1/none", nil)
 			require.NoError(t, err)
 
 			resp, err := cli.Do(req)

@@ -56,7 +56,7 @@ func Test_MsgHandler_FindMsg(t *testing.T) {
 			defer srv.Close()
 
 			cli := nethttp.DefaultClient
-			req, err := nethttp.NewRequest(tc.httpMethod, srv.URL+"/msg/777", nil)
+			req, err := nethttp.NewRequest(tc.httpMethod, srv.URL+"/v1/msg/777", nil)
 			require.NoError(t, err)
 
 			resp, err := cli.Do(req)
