@@ -1,1 +1,2 @@
 export DATABASE_AWS_DYNAMODB_ENDPOINT="http://localhost:8000"
+export DATABASE_AWS_DYNAMODB_MSG_TABLE="messages"

@@ -4,9 +4,6 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"io"
-	"log/slog"
-	"os"
 	"testing"
 
 	dynamodbclient "go-backend-skeleton/app/internal/db/dynamodb"
@@ -15,22 +12,6 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb/types"
 )
-
-var (
-	dbClient *dynamodbclient.DynamoDBClient
-	dbLogger *slog.Logger
-)
-
-func init() {
-	dbLogger = slog.New(slog.NewTextHandler(io.Discard, nil))
-	// dbLogger = slog.Default()
-
-	var err error
-	dbClient, err = dynamodbclient.NewDynamoDBClient(os.Getenv("DATABASE_AWS_DYNAMODB_ENDPOINT"), os.Getenv("AWS_REGION"), dbLogger)
-	if err != nil {
-		panic(err)
-	}
-}
 
 type TestItem1 struct {
 	HashKey     string `dynamodbav:"hash_key"`

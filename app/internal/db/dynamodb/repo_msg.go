@@ -3,8 +3,6 @@ package dynamodb
 import (
 	"context"
 	"log/slog"
-
-	"go-backend-skeleton/app/internal/db"
 )
 
 // MsgRepository persists messages in DynamoDB.
@@ -13,17 +11,13 @@ type MsgRepository struct {
 	TableName string
 }
 
-var _ db.MsgRepository = &MsgRepository{}
-
 // NewMsgRepository constructs a message repository.
 func NewMsgRepository(
 	client *DynamoDBClient,
 	tableName string,
 	logger *slog.Logger,
-) db.MsgRepository {
-	var repo db.MsgRepository = &MsgRepository{client, tableName}
-	repo = NewMsgRepositoryLoggingMiddleware(logger)(repo)
-	return repo
+) *MsgRepository {
+	return &MsgRepository{client, tableName}
 }
 
 // Delete removes a message.

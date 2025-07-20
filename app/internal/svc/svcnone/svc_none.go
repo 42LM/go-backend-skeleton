@@ -12,12 +12,12 @@ type NoneSvc struct {
 	noneRepo NoneRepo
 }
 
-// NoneSvcConfig contains the configuration params of the service.
+// NoneSvcConfig contains the configuration params of the none service.
 type NoneSvcConfig struct {
 	NoneRepo NoneRepo
 }
 
-// New returns a service.
+// New returns a none service.
 func New(config *NoneSvcConfig) *NoneSvc {
 	svc := &NoneSvc{
 		noneRepo: config.NoneRepo,

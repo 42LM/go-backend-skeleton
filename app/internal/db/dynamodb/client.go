@@ -11,7 +11,9 @@ import (
 	"github.com/aws/aws-sdk-go-v2/feature/dynamodb/attributevalue"
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb/types"
-	"github.com/aws/aws-xray-sdk-go/instrumentation/awsv2"
+
+	// Xray
+	// "github.com/aws/aws-xray-sdk-go/instrumentation/awsv2"
 	"github.com/aws/smithy-go/logging"
 )
 
@@ -105,7 +107,7 @@ func NewDynamoDBClient(baseEndpoint, region string, logger *slog.Logger) (*Dynam
 	}
 
 	// Xray
-	awsv2.AWSV2Instrumentor(&cfg.APIOptions)
+	// awsv2.AWSV2Instrumentor(&cfg.APIOptions)
 
 	// Using the Config value, create the DynamoDB client.
 	client := dynamodb.NewFromConfig(cfg, func(o *dynamodb.Options) {
