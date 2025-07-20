@@ -33,7 +33,11 @@ go run main.go server
 
 Make a request
 ```sh
-curl localhost:8080/none
+curl localhost:8080/v1/none
+```
+
+```sh
+curl localhost:8080/v1/msg/1
 ```
 
 ## Development
