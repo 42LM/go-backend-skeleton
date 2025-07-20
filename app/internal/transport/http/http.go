@@ -1,21 +1,23 @@
 package http
 
 import (
+	"log/slog"
 	"net/http"
 
-	"go-backend-skeleton/app/internal/svc"
+	"go-backend-skeleton/app/internal/transport/http/httpnone"
 )
 
 // HandlerConfig defines the config for the HTTP handler.
 type HandlerConfig struct {
-	Svc svc.Service
+	NoneSvc httpnone.NoneSvc
+	Logger  *slog.Logger
 }
 
 // NewHandler returns an HTTP handler with middleware wired in.
 func NewHandler(config HandlerConfig) http.Handler {
 	mux := http.NewServeMux()
 
-	mux.Handle("GET /none", handlerFindNone(config.Svc))
+	mux.HandleFunc("GET /none", httpnone.NewNoneHandler(config.NoneSvc, config.Logger).HandlerFunc)
 
 	return mux
 }

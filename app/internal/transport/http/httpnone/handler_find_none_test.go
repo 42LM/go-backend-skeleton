@@ -1,4 +1,4 @@
-package http_test
+package httpnone_test
 
 import (
 	"io"
@@ -9,6 +9,7 @@ import (
 	svcmock "go-backend-skeleton/app/internal/svc/mock"
 	"go-backend-skeleton/app/internal/transport/http"
 
+	// TODO: fix imports
 	"github.com/stretchr/testify/mock"
 	testifymock "github.com/stretchr/testify/mock"
 
@@ -52,7 +53,7 @@ func Test_FindNone(t *testing.T) {
 			}
 
 			handler := http.NewHandler(http.HandlerConfig{
-				Svc: mockSvc,
+				NoneSvc: mockSvc,
 			})
 
 			srv := httptest.NewServer(handler)
