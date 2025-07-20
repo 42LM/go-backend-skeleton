@@ -11,6 +11,8 @@ import (
 	"go-backend-skeleton/app/internal/transport/http/httpmsg"
 )
 
+// TODO: generate logging
+
 // db level logging
 
 type loggingRepo struct {

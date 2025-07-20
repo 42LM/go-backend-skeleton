@@ -14,7 +14,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func Test_FindMsg(t *testing.T) {
+func Test_MsgHandler_FindMsg(t *testing.T) {
 	t.Parallel()
 
 	mockSvc := svcmock.NewMockMsgSvc(t)

@@ -12,7 +12,9 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb/types"
 
+	// FIXME
 	// Xray
+	// causes problems locally, for simplification this is omitted
 	// "github.com/aws/aws-xray-sdk-go/instrumentation/awsv2"
 	"github.com/aws/smithy-go/logging"
 )
@@ -89,7 +91,6 @@ func SetDefault() CreateTableOption {
 
 // NewDynamoDBClient returns a new DynamoDB client.
 func NewDynamoDBClient(baseEndpoint, region string, logger *slog.Logger) (*DynamoDBClient, error) {
-	// Create a logger
 	dynamoDBLogger := logger.With("database", "dynamodb")
 
 	// Wrap the dynamoDBLogger in a function to satisfy the logger interface.
@@ -97,7 +98,6 @@ func NewDynamoDBClient(baseEndpoint, region string, logger *slog.Logger) (*Dynam
 		dynamoDBLogger.Info("["+string(classification)+"] "+format, v...)
 	})
 
-	// Load config values.
 	cfg, err := config.LoadDefaultConfig(context.Background(),
 		config.WithLogger(wl),
 		config.WithLogConfigurationWarnings(true),
@@ -109,7 +109,6 @@ func NewDynamoDBClient(baseEndpoint, region string, logger *slog.Logger) (*Dynam
 	// Xray
 	// awsv2.AWSV2Instrumentor(&cfg.APIOptions)
 
-	// Using the Config value, create the DynamoDB client.
 	client := dynamodb.NewFromConfig(cfg, func(o *dynamodb.Options) {
 		if baseEndpoint != "" {
 			o.BaseEndpoint = aws.String(baseEndpoint)
@@ -120,7 +119,7 @@ func NewDynamoDBClient(baseEndpoint, region string, logger *slog.Logger) (*Dynam
 	return &DynamoDBClient{client}, nil
 }
 
-// CreateTable creates the table.
+// CreateTable creates a dynamodb table.
 func (c *DynamoDBClient) CreateTable(ctx context.Context, tableName string, opts ...CreateTableOption) error {
 	options := &CreateTableOptions{}
 	for _, opt := range opts {
@@ -149,7 +148,7 @@ func (c *DynamoDBClient) CreateTable(ctx context.Context, tableName string, opts
 	return nil
 }
 
-// DeleteItem wraps the client's DeleteItem.
+// DeleteItem deletes a dynamodb item.
 func (c *DynamoDBClient) DeleteItem(ctx context.Context, tableName string, compositePrimaryKey map[string]any) error {
 	pkMap := make(map[string]types.AttributeValue, len(compositePrimaryKey))
 	for k, v := range compositePrimaryKey {
@@ -171,7 +170,7 @@ func (c *DynamoDBClient) DeleteItem(ctx context.Context, tableName string, compo
 	return nil
 }
 
-// GetItem wraps the client's GetItem.
+// GetItem fetches a dynamodb item.
 func (c *DynamoDBClient) GetItem(ctx context.Context, tableName string, compositePrimaryKey map[string]any, data any) error {
 	pkMap := make(map[string]types.AttributeValue, len(compositePrimaryKey))
 	for k, v := range compositePrimaryKey {
@@ -194,7 +193,7 @@ func (c *DynamoDBClient) GetItem(ctx context.Context, tableName string, composit
 	return attributevalue.UnmarshalMap(resp.Item, &data)
 }
 
-// PutItem wraps the client's PutItem.
+// PutItem creates or updates a dynamodb item.
 func (c *DynamoDBClient) PutItem(ctx context.Context, tableName string, data any, conditionExpression *string) error {
 	item, err := attributevalue.MarshalMap(data)
 	if err != nil {
@@ -213,7 +212,7 @@ func (c *DynamoDBClient) PutItem(ctx context.Context, tableName string, data any
 	return err
 }
 
-// UpdateItem wraps the client's UpdateItem functionality.
+// UpdateItem updates a dynamodb item.
 func (c *DynamoDBClient) UpdateItem(ctx context.Context, tableName string, compositePrimaryKey map[string]any, updateExpression string, expressionAttributeValues any) error {
 	pkMap := make(map[string]types.AttributeValue, len(compositePrimaryKey))
 	for k, v := range compositePrimaryKey {
@@ -244,6 +243,7 @@ func (c *DynamoDBClient) UpdateItem(ctx context.Context, tableName string, compo
 	return nil
 }
 
+// QueryItems queries dyanmodb items.
 func (c *DynamoDBClient) QueryItems(ctx context.Context, tableName string, keyConditionExpression string, expressionAttributeValues map[string]any, config *QueryConfig) ([]map[string]types.AttributeValue, error) {
 	if config == nil {
 		config = &QueryConfig{}

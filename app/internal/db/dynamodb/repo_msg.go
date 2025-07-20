@@ -1,3 +1,5 @@
+// Package dynamodb wraps an aws dynamodb client.
+// It provides repositorys for data management.
 package dynamodb
 
 import (

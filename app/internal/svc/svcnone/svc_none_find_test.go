@@ -11,7 +11,7 @@ import (
 	testifymock "github.com/stretchr/testify/mock"
 )
 
-func Test_FindNone(t *testing.T) {
+func Test_NoneSvc_FindNone(t *testing.T) {
 	t.Parallel()
 
 	mockNoneRepo := dbmock.NewMockNoneRepo(t)

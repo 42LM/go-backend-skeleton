@@ -1,24 +1,26 @@
+// Package httpmsg injects the message service into the handler layer.
 package httpmsg
 
 import (
 	"context"
 	"log/slog"
-	// "net/http"
 )
 
-// MsgSvc is an interface defined by the handler layer (the consumer).
-// It specifies the methods the handler needs from the service.
+// MsgSvc represents the message service dependency that provides data for the MsgHandler.
 type MsgSvc interface {
+	// FindMsg finds something in the msg repository by given id.
 	FindMsg(ctx context.Context, id string) string
 }
 
+// MsgHandler is the concrete struct of the message handler.
+// It wraps the service interface.
 type MsgHandler struct {
 	svc    MsgSvc
 	logger *slog.Logger
 }
 
-// NewMsgHandler is a constructor that returns a *MsgHandler.
-func NewMsgHandler(s MsgSvc, l *slog.Logger) *MsgHandler {
+// New returns a message handler.
+func New(s MsgSvc, l *slog.Logger) *MsgHandler {
 	return &MsgHandler{
 		svc:    s,
 		logger: l,

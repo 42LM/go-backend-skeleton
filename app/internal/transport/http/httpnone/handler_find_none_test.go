@@ -15,7 +15,7 @@ import (
 )
 
 // TODO: more love <3
-func Test_FindNone(t *testing.T) {
+func Test_NoneHandler_FindNone(t *testing.T) {
 	t.Parallel()
 
 	mockSvc := svcmock.NewMockNoneSvc(t)

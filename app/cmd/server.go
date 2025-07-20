@@ -24,9 +24,11 @@ func init() {
 	rootCmd.AddCommand(serverCmd)
 }
 
+// serverCmd starts a web server, optionally by given port.
+// If no port is given the server will run on the default port `:8080`.
 var serverCmd = &cobra.Command{
 	Use:   "server",
-	Short: "Starts an HTTP server",
+	Short: "Spin up HTTP server",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		port, err := cmd.Flags().GetString("port")
 		if err != nil {
@@ -39,14 +41,17 @@ var serverCmd = &cobra.Command{
 			Level:     slog.LevelDebug,
 		})
 		logger := slog.New(jsonHandler)
-
+		// setup sub loggers for database and service layer
 		dbLogger := logger.With("layer", "database")
 		svcLogger := logger.With("layer", "service")
+
 		dynamodbClient, err := makeDynamoDBClient(dbLogger)
 		if err != nil {
 			return err
 		}
 
+		// TODO: refactor
+		// create repos and services and connect them with logging
 		noneRepo := none.NewNoneRepository()
 		loggedNoneRepo := loggingnone.NewLoggingRepo(noneRepo, dbLogger)
 		noneSvc := svcnone.New(&svcnone.NoneSvcConfig{
@@ -61,6 +66,7 @@ var serverCmd = &cobra.Command{
 		})
 		loggedMsgSvc := loggingmsg.NewLoggingSvc(msgSvc, svcLogger)
 
+		// create the main http handler with the services
 		handler := internalhttp.NewHandler(internalhttp.HandlerConfig{
 			NoneSvc: loggedNoneSvc,
 			MsgSvc:  loggedMsgSvc,
@@ -73,6 +79,7 @@ var serverCmd = &cobra.Command{
 			WriteTimeout: 10 * time.Second,
 			IdleTimeout:  120 * time.Second,
 		}
+		// spin up the server
 		fmt.Println("listening on port " + port)
 		err = httpServer.ListenAndServe()
 		if err != nil {
@@ -83,10 +90,11 @@ var serverCmd = &cobra.Command{
 	},
 }
 
-func makeDynamoDBClient(logger *slog.Logger) (*dynamodb.DynamoDBClient, error) {
+// TODO: refactor
+func makeDynamoDBClient(l *slog.Logger) (*dynamodb.DynamoDBClient, error) {
 	return dynamodb.NewDynamoDBClient(
 		os.Getenv("DATABASE_AWS_DYNAMODB_ENDPOINT"),
 		os.Getenv("AWS_REGION"),
-		logger,
+		l,
 	)
 }

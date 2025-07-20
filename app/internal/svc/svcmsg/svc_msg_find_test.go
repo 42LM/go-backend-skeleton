@@ -11,7 +11,7 @@ import (
 	testifymock "github.com/stretchr/testify/mock"
 )
 
-func Test_FindMsg(t *testing.T) {
+func Test_MsgSvc_FindMsg(t *testing.T) {
 	t.Parallel()
 
 	mockMsgRepo := dbmock.NewMockMsgRepo(t)

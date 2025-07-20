@@ -1,24 +1,25 @@
+// Package httpnone injects the none service into the handler layer.
 package httpnone
 
 import (
 	"context"
 	"log/slog"
-	// "net/http"
 )
 
-// NoneSvc is an interface defined by the handler layer (the consumer).
-// It specifies the methods the handler needs from the service.
+// NoneSvc represents the none service dependency that provides data for the NoneHandler.
 type NoneSvc interface {
 	FindNone(ctx context.Context) string
 }
 
+// NoneHandler is the concrete struct of the none handler.
+// It wraps the service interface.
 type NoneHandler struct {
 	svc    NoneSvc
 	logger *slog.Logger
 }
 
-// NewNoneHandler is a constructor that returns a *NoneHandler.
-func NewNoneHandler(s NoneSvc, l *slog.Logger) *NoneHandler {
+// New returns a none handler.
+func New(s NoneSvc, l *slog.Logger) *NoneHandler {
 	return &NoneHandler{
 		svc:    s,
 		logger: l,

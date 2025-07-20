@@ -1,6 +1,8 @@
-/*
-Copyright © 2025 Lukas Moeller
-*/
+// Package cmd holds the CLI command definitions.
+//
+// This file was partially generated with spf13/Cobra 🐍,
+// read more about the cobra generator:
+//   - https://github.com/spf13/cobra-cli/blob/main/README.md
 package cmd
 
 import (
@@ -10,19 +12,19 @@ import (
 	"github.com/spf13/cobra"
 )
 
+// used to inject value at build time using linker flag.
+//
+// go build -ldflags "-X go-backend-skeleton/app/cmd.version=v0.0.0" -o gbs
 var version string
 
-// rootCmd represents the base command when called without any subcommands
+// rootCmd represents the base command when called without any subcommands.
 var rootCmd = &cobra.Command{
 	Use:     "gbs",
 	Version: version,
-	Short:   "Go backend skeleton",
-	Long: `Go backend skeleton utilizing:
-* Cobra ()
-`,
-	// Uncomment the following line if your bare application
-	// has an action associated with it:
-	// Run: func(cmd *cobra.Command, args []string) { },
+	Short:   "gbs - go backend skeleton",
+	Run: func(cmd *cobra.Command, args []string) {
+		_ = cmd.Help()
+	},
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.
@@ -36,14 +38,5 @@ func Execute() {
 }
 
 func init() {
-	// Here you will define your flags and configuration settings.
-	// Cobra supports persistent flags, which, if defined here,
-	// will be global for your application.
-
-	// rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.go-backend-skeleton.yaml)")
-
-	// Cobra also supports local flags, which will only run
-	// when this action is called directly.
-	// rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 	rootCmd.CompletionOptions.DisableDefaultCmd = true
 }
