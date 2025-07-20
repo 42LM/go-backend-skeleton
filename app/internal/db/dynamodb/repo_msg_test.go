@@ -31,10 +31,6 @@ func Test_MsgRepo_Bootstrap(t *testing.T) {
 		err := r.Put(ctx, id, "test-msg-1")
 		require.NoError(t, err)
 	}
-	{ // Put msg into db
-		err := r.Put(ctx, "1", "cmon pls")
-		require.NoError(t, err)
-	}
 	{ // Find
 		msg := r.Find(ctx, id)
 		assert.Equal(t, "test-msg-1", msg)
