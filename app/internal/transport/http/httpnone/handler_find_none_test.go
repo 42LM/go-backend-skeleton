@@ -10,7 +10,6 @@ import (
 	"go-backend-skeleton/app/internal/transport/http"
 
 	// TODO: fix imports
-	"github.com/stretchr/testify/mock"
 	testifymock "github.com/stretchr/testify/mock"
 
 	"github.com/stretchr/testify/assert"
@@ -21,11 +20,11 @@ import (
 func Test_FindNone(t *testing.T) {
 	t.Parallel()
 
-	mockSvc := svcmock.NewMockService(t)
+	mockSvc := svcmock.NewMockNoneSvc(t)
 
 	testCases := map[string]struct {
 		findNoneServiceCall *testifymock.Call
-		setupMock           func(mockSvc *svcmock.MockService)
+		setupMock           func(mockSvc *svcmock.MockNoneSvc)
 
 		httpMethod string
 
@@ -33,8 +32,8 @@ func Test_FindNone(t *testing.T) {
 		expResponse     string
 	}{
 		"ok": {
-			setupMock: func(mockSvc *svcmock.MockService) {
-				mockSvc.On("FindNone", mock.Anything).Return("none").Once()
+			setupMock: func(mockSvc *svcmock.MockNoneSvc) {
+				mockSvc.On("FindNone", testifymock.Anything).Return("none").Once()
 			},
 			httpMethod:      nethttp.MethodGet,
 			expResponseCode: nethttp.StatusOK,
@@ -65,14 +64,14 @@ func Test_FindNone(t *testing.T) {
 
 			resp, err := cli.Do(req)
 			require.NoError(t, err)
-
 			defer resp.Body.Close()
+
 			assert.Equal(t, tc.expResponseCode, resp.StatusCode, "http status code")
 			body, err := io.ReadAll(resp.Body)
 			require.NoError(t, err)
 			assert.Equal(t, tc.expResponse, string(body))
 			if tc.setupMock != nil {
-				assert.True(t, mockSvc.AssertCalled(t, "FindNone", mock.Anything))
+				assert.True(t, mockSvc.AssertCalled(t, "FindNone", testifymock.Anything))
 			}
 		})
 	}

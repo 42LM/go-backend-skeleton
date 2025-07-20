@@ -11,6 +11,8 @@ import (
 	"go-backend-skeleton/app/internal/transport/http/httpnone"
 )
 
+// db level logging
+
 type loggingRepo struct {
 	next   svcnone.NoneRepo
 	logger *slog.Logger
@@ -29,6 +31,8 @@ func (l *loggingRepo) Find(ctx context.Context) string {
 	}(time.Now())
 	return l.next.Find(ctx)
 }
+
+// svc level logging
 
 type loggingService struct {
 	next   httpnone.NoneSvc
