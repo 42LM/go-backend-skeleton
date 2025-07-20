@@ -1,5 +1,7 @@
 pkgname: "mock"
 packages:
+
+  # DB MOCKS
   go-backend-skeleton/app/internal/svc/svcmsg:
     config:
       filename: mock_repo_msg.go
@@ -10,6 +12,8 @@ packages:
       filename: mock_repo_none.go
       dir: "app/internal/db/mock"
       all: true
+
+  # SVC MOCKS
   go-backend-skeleton/app/internal/transport/http/httpmsg:
     config:
       filename: mock_svc_msg.go
