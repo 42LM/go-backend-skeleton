@@ -1,3 +1,5 @@
+github.com/42LM/muxify v1.0.0 h1:thGgqqKOk7Ug9PzbaGTW/VLu2P+4jIK32TCKwIGJ9CM=
+github.com/42LM/muxify v1.0.0/go.mod h1:bAt4RSZJgI0vdtSIEJ1U8byG8m5scjW92VZQjvYStyc=
 github.com/aws/aws-sdk-go-v2 v1.36.5 h1:0OF9RiEMEdDdZEMqF9MRjevyxAQcf6gY+E7vwBILFj0=
 github.com/aws/aws-sdk-go-v2 v1.36.5/go.mod h1:EYrzvCCN9CMUTa5+6lf6MM4tq3Zjp8UhSGR/cBsjai0=
 github.com/aws/aws-sdk-go-v2/config v1.29.17 h1:jSuiQ5jEe4SAMH6lLRMY9OVC+TqJLP5655pBGjmnjr0=

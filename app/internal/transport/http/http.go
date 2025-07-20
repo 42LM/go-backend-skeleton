@@ -6,6 +6,8 @@ import (
 
 	"go-backend-skeleton/app/internal/transport/http/httpmsg"
 	"go-backend-skeleton/app/internal/transport/http/httpnone"
+
+	"github.com/42LM/muxify"
 )
 
 // HandlerConfig defines the config for the HTTP handler.
@@ -17,8 +19,11 @@ type HandlerConfig struct {
 
 // NewHandler returns an HTTP handler with middleware wired in.
 func NewHandler(config HandlerConfig) http.Handler {
-	mux := http.NewServeMux()
+	mux := muxify.NewMux()
 
+	// TODO: Create logging mw
+	// mux.Use(LoggingMiddleware)
+	mux.Prefix("/v1")
 	mux.HandleFunc("GET /none", httpnone.NewNoneHandler(config.NoneSvc, config.Logger).HandlerFunc)
 	mux.HandleFunc("GET /msg/{id}", httpmsg.NewMsgHandler(config.MsgSvc, config.Logger).HandlerFunc)
 

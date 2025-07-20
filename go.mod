@@ -3,6 +3,7 @@ module go-backend-skeleton
 go 1.24.0
 
 require (
+	github.com/42LM/muxify v1.0.0
 	github.com/aws/aws-sdk-go-v2 v1.36.5
 	github.com/aws/aws-sdk-go-v2/config v1.29.17
 	github.com/aws/aws-sdk-go-v2/feature/dynamodb/attributevalue v1.19.5
