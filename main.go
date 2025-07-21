@@ -1,3 +1,5 @@
+//go:generate mockery
+
 /*
 Copyright © 2025 Lukas Moeller
 */

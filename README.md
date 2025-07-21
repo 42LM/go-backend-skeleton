@@ -48,14 +48,8 @@ curl localhost:8080/v1/msg/777
 curl -X POST localhost:8080/rpc/msg/777 -d '{"msg":"test-msg"}'
 ```
 
-### Generate mocks
-Generate mocks from interfaces with [mockery](https://vektra.github.io/mockery/latest/installation/).
-```sh
-mockery
-```
-
-### Generate protobuf
-Generate mocks from interfaces with [mockery](https://vektra.github.io/mockery/latest/installation/).
+### Generate mocks + proto
+Generate mocks from interfaces with [mockery](https://vektra.github.io/mockery/latest/installation/) and use 
 ```sh
 go generate ./...
 ```
@@ -64,3 +58,9 @@ go generate ./...
 ```sh
 go build -ldflags "-X go-backend-skeleton/app/cmd.version=v0.0.0" -o gbs
 ```
+
+### Troubleshoot
+Make sure the following is installed on your machine. For more info check [protobuf](https://github.com/golang/protobuf).
+* `brew install protobug`
+* `brew install protoc-gen-go`
+* `brew install protoc-gen-go-grpc`
