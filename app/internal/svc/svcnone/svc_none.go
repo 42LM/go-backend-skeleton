@@ -3,6 +3,8 @@ package svcnone
 
 import (
 	"context"
+
+	"go-backend-skeleton/app/internal/db/none"
 )
 
 // NoneRepo represents the none repository dependency that provides data for the NoneSvc.
@@ -10,6 +12,9 @@ type NoneRepo interface {
 	// Find returns a static string.
 	Find(ctx context.Context) string
 }
+
+// Prove that the none repositroy implements the NoneRepo interface
+var _ NoneRepo = &none.NoneRepository{}
 
 // NoneSvc is the concrete struct of the none service.
 // It wraps the repository interface.
