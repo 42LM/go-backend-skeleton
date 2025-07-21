@@ -5,8 +5,8 @@ package loggingmsg
 import (
 	"context"
 	"log/slog"
-	"time"
 
+	"go-backend-skeleton/app/internal/logging"
 	"go-backend-skeleton/app/internal/svc/svcmsg"
 	"go-backend-skeleton/app/internal/transport"
 )
@@ -25,25 +25,12 @@ func NewLoggingRepo(next svcmsg.MsgRepo, logger *slog.Logger) svcmsg.MsgRepo {
 }
 
 func (l *loggingRepo) Find(ctx context.Context, id string) string {
-	defer func(begin time.Time) {
-		l.logger.Info(
-			"Find",
-			"params.id", id,
-			"took", float64(time.Since(begin))/1e6,
-		)
-	}(time.Now())
+	logging.Log(l.logger, "Find", map[string]any{"params.id": id})
 	return l.next.Find(ctx, id)
 }
 
 func (l *loggingRepo) Put(ctx context.Context, id, msg string) error {
-	defer func(begin time.Time) {
-		l.logger.Info(
-			"Put",
-			"params.id", id,
-			"params.msg", msg,
-			"took", float64(time.Since(begin))/1e6,
-		)
-	}(time.Now())
+	logging.Log(l.logger, "Put", map[string]any{"params.id": id, "params.msg": msg})
 	return l.next.Put(ctx, id, msg)
 }
 
@@ -59,24 +46,11 @@ func NewLoggingSvc(next transport.MsgSvc, logger *slog.Logger) transport.MsgSvc 
 }
 
 func (l *loggingSvc) FindMsg(ctx context.Context, id string) string {
-	defer func(begin time.Time) {
-		l.logger.Info(
-			"FindMsg",
-			"params.id", id,
-			"took", float64(time.Since(begin))/1e6,
-		)
-	}(time.Now())
+	logging.Log(l.logger, "FindMsg", map[string]any{"params.id": id})
 	return l.next.FindMsg(ctx, id)
 }
 
 func (l *loggingSvc) PutMsg(ctx context.Context, id, msg string) error {
-	defer func(begin time.Time) {
-		l.logger.Info(
-			"PutMsg",
-			"params.id", id,
-			"params.msg", msg,
-			"took", float64(time.Since(begin))/1e6,
-		)
-	}(time.Now())
+	logging.Log(l.logger, "PutMsg", map[string]any{"params.id": id, "params.msg": msg})
 	return l.next.PutMsg(ctx, id, msg)
 }
