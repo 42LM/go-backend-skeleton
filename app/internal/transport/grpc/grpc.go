@@ -25,7 +25,6 @@ func GRPCServeMux(srv pb.MessageServer) *runtime.ServeMux {
 	s := grpc.NewServer()
 	pb.RegisterMessageServer(s, srv)
 
-	log.Println("Starting internal-only gRPC service on in-memory buffer")
 	go func() {
 		if err := s.Serve(lis); err != nil {
 			log.Fatalf("failed to serve internal gRPC: %v", err)

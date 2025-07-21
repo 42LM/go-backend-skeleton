@@ -9,6 +9,7 @@ import (
 
 	"go-backend-skeleton/app/internal/db/dynamodb"
 	"go-backend-skeleton/app/internal/db/none"
+	"go-backend-skeleton/app/internal/logging"
 	"go-backend-skeleton/app/internal/logging/loggingmsg"
 	"go-backend-skeleton/app/internal/logging/loggingnone"
 	"go-backend-skeleton/app/internal/svc/svcmsg"
@@ -36,18 +37,14 @@ var serverCmd = &cobra.Command{
 		}
 
 		// create a smol schlogger
-		jsonHandler := slog.NewJSONHandler(os.Stdout, &slog.HandlerOptions{
-			AddSource: true,
-			Level:     slog.LevelDebug,
-		})
-		logger := slog.New(jsonHandler)
+		logger := logging.NewSlogger()
 		// setup sub loggers for database and service layer
 		dbLogger := logger.With("layer", "database")
 		svcLogger := logger.With("layer", "service")
 
 		dynamodbClient, err := makeDynamoDBClient(dbLogger)
 		if err != nil {
-			return err
+			return fmt.Errorf("failed to create dynamodb client: %w", err)
 		}
 
 		// TODO: refactor
@@ -80,10 +77,9 @@ var serverCmd = &cobra.Command{
 			IdleTimeout:  120 * time.Second,
 		}
 		// spin up the server
-		fmt.Println("listening on port " + port)
 		err = httpServer.ListenAndServe()
 		if err != nil {
-			return fmt.Errorf("HTTP server failed: %w", err)
+			return fmt.Errorf("failed to spin up HTTP server: %w", err)
 		}
 
 		return nil
