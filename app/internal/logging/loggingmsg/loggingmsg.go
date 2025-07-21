@@ -8,8 +8,7 @@ import (
 	"time"
 
 	"go-backend-skeleton/app/internal/svc/svcmsg"
-	"go-backend-skeleton/app/internal/transport/grpc/grpcmsg"
-	"go-backend-skeleton/app/internal/transport/http/httpmsg"
+	"go-backend-skeleton/app/internal/transport"
 )
 
 // TODO: generate logging
@@ -51,11 +50,11 @@ func (l *loggingRepo) Put(ctx context.Context, id, msg string) error {
 // svc level logging
 
 type loggingSvc struct {
-	next   httpmsg.MsgSvc
+	next   transport.MsgSvc
 	logger *slog.Logger
 }
 
-func NewLoggingSvc(next httpmsg.MsgSvc, logger *slog.Logger) httpmsg.MsgSvc {
+func NewLoggingSvc(next transport.MsgSvc, logger *slog.Logger) transport.MsgSvc {
 	return &loggingSvc{next: next, logger: logger}
 }
 
@@ -70,16 +69,7 @@ func (l *loggingSvc) FindMsg(ctx context.Context, id string) string {
 	return l.next.FindMsg(ctx, id)
 }
 
-type loggingGrpcSvc struct {
-	next   grpcmsg.MsgSvc
-	logger *slog.Logger
-}
-
-func NewLoggingGrpcSvc(next grpcmsg.MsgSvc, logger *slog.Logger) grpcmsg.MsgSvc {
-	return &loggingGrpcSvc{next: next, logger: logger}
-}
-
-func (l *loggingGrpcSvc) PutMsg(ctx context.Context, id, msg string) error {
+func (l *loggingSvc) PutMsg(ctx context.Context, id, msg string) error {
 	defer func(begin time.Time) {
 		l.logger.Info(
 			"PutMsg",

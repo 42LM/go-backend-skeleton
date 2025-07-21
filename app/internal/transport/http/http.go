@@ -4,6 +4,7 @@ import (
 	"log/slog"
 	"net/http"
 
+	"go-backend-skeleton/app/internal/transport"
 	"go-backend-skeleton/app/internal/transport/grpc"
 	"go-backend-skeleton/app/internal/transport/grpc/grpcmsg"
 	"go-backend-skeleton/app/internal/transport/http/httpmsg"
@@ -14,10 +15,9 @@ import (
 
 // HandlerConfig defines the config for the HTTP handler.
 type HandlerConfig struct {
-	NoneSvc    httpnone.NoneSvc
-	MsgSvc     httpmsg.MsgSvc
-	GRPCMsgSvc grpcmsg.MsgSvc
-	Logger     *slog.Logger
+	NoneSvc httpnone.NoneSvc
+	MsgSvc  transport.MsgSvc
+	Logger  *slog.Logger
 }
 
 // NewHandler creates a default *http.ServeMux and defines routes.
@@ -25,7 +25,7 @@ type HandlerConfig struct {
 func NewHandler(config HandlerConfig) http.Handler {
 	mux := muxify.NewMux()
 
-	grpcServer := grpcmsg.New(config.GRPCMsgSvc)
+	grpcServer := grpcmsg.New(config.MsgSvc)
 	grpcMux := grpc.GRPCServeMux(grpcServer)
 
 	// grpc gateway

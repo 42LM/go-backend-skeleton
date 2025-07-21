@@ -15,8 +15,7 @@ import (
 func NewMockMsgSvc(t interface {
 	mock.TestingT
 	Cleanup(func())
-},
-) *MockMsgSvc {
+}) *MockMsgSvc {
 	mock := &MockMsgSvc{}
 	mock.Mock.Test(t)
 

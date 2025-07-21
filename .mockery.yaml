@@ -14,14 +14,9 @@ packages:
       all: true
 
   # SVC MOCKS
-  go-backend-skeleton/app/internal/transport/http/httpmsg:
+  go-backend-skeleton/app/internal/transport:
     config:
       filename: mock_svc_msg.go
-      dir: "app/internal/svc/mock"
-      all: true
-  go-backend-skeleton/app/internal/transport/grpc/grpcmsg:
-    config:
-      filename: mock_svc_grpc_msg.go
       dir: "app/internal/svc/mock"
       all: true
   go-backend-skeleton/app/internal/transport/http/httpnone:

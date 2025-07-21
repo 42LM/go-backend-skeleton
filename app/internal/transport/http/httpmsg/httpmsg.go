@@ -2,28 +2,21 @@
 package httpmsg
 
 import (
-	"context"
-
 	"go-backend-skeleton/app/internal/svc/svcmsg"
+	"go-backend-skeleton/app/internal/transport"
 )
 
-// MsgSvc represents the message service dependency that provides data for the MsgHandler.
-type MsgSvc interface {
-	// FindMsg finds something in the msg repository by given id.
-	FindMsg(ctx context.Context, id string) string
-}
-
 // Prove that the message service implements the MsgSvc interface
-var _ MsgSvc = &svcmsg.MsgSvc{}
+var _ transport.MsgSvc = &svcmsg.MsgSvc{}
 
 // MsgHandler is the concrete struct of the message handler.
 // It wraps the service interface.
 type MsgHandler struct {
-	svc MsgSvc
+	svc transport.MsgSvc
 }
 
 // New returns a message handler.
-func New(s MsgSvc) *MsgHandler {
+func New(s transport.MsgSvc) *MsgHandler {
 	return &MsgHandler{
 		svc: s,
 	}

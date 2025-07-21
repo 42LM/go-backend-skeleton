@@ -1,9 +1,8 @@
 package grpcmsg
 
 import (
-	"context"
-
 	"go-backend-skeleton/app/internal/svc/svcmsg"
+	"go-backend-skeleton/app/internal/transport"
 	pb "go-backend-skeleton/app/internal/transport/grpc/pb"
 )
 
@@ -19,21 +18,16 @@ import (
 // server is the gRPC server implementation. It is an INTERNAL component
 // that the HTTP gateway will call. It is not exposed to the public.
 type Server struct {
-	MsgSvc MsgSvc
+	MsgSvc transport.MsgSvc
 
 	pb.UnimplementedGreeterServer
 }
 
-// MsgSvc represents the message service dependency that provides data for the grpc server.
-type MsgSvc interface {
-	PutMsg(ctx context.Context, id, msg string) error
-}
-
 // Prove that the message service implements the MsgSvc interface
-var _ MsgSvc = &svcmsg.MsgSvc{}
+var _ transport.MsgSvc = &svcmsg.MsgSvc{}
 
 // New returns a grpc server.
-func New(s MsgSvc) *Server {
+func New(s transport.MsgSvc) *Server {
 	return &Server{
 		MsgSvc: s,
 	}

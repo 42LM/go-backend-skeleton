@@ -65,13 +65,11 @@ var serverCmd = &cobra.Command{
 			MsgRepo: loggedMsgRepo,
 		})
 		loggedMsgSvc := loggingmsg.NewLoggingSvc(msgSvc, svcLogger)
-		loggedGrpcSvc := loggingmsg.NewLoggingGrpcSvc(msgSvc, svcLogger)
 
 		// create the main http handler with the services
 		handler := internalhttp.NewHandler(internalhttp.HandlerConfig{
-			NoneSvc:    loggedNoneSvc,
-			MsgSvc:     loggedMsgSvc,
-			GRPCMsgSvc: loggedGrpcSvc,
+			NoneSvc: loggedNoneSvc,
+			MsgSvc:  loggedMsgSvc,
 		})
 
 		httpServer := http.Server{
