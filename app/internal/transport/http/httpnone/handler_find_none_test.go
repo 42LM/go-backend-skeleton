@@ -2,6 +2,7 @@ package httpnone_test
 
 import (
 	"io"
+	"log/slog"
 	nethttp "net/http"
 	"net/http/httptest"
 	"testing"
@@ -47,9 +48,10 @@ func Test_NoneHandler_FindNone(t *testing.T) {
 			if tc.setupMock != nil {
 				tc.setupMock(mockSvc)
 			}
-
+			nopLogger := slog.New(slog.NewTextHandler(io.Discard, nil))
 			handler := http.NewHandler(http.HandlerConfig{
 				NoneSvc: mockSvc,
+				Logger:  nopLogger,
 			})
 
 			srv := httptest.NewServer(handler)

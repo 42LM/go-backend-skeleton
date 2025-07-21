@@ -2,6 +2,7 @@ package httpmsg_test
 
 import (
 	"io"
+	"log/slog"
 	nethttp "net/http"
 	"net/http/httptest"
 	"testing"
@@ -48,8 +49,10 @@ func Test_MsgHandler_FindMsg(t *testing.T) {
 				tc.setupMock(mockSvc)
 			}
 
+			nopLogger := slog.New(slog.NewTextHandler(io.Discard, nil))
 			handler := http.NewHandler(http.HandlerConfig{
 				MsgSvc: mockSvc,
+				Logger: nopLogger,
 			})
 
 			srv := httptest.NewServer(handler)
