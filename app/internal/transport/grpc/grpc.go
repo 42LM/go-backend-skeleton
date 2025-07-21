@@ -1,3 +1,6 @@
+//go:generate sh proto/protoc_generate.sh
+
+// Package grpc provides a function to create a grpc gateway.
 package grpc
 
 import (

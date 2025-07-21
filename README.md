@@ -54,6 +54,12 @@ Generate mocks from interfaces with [mockery](https://vektra.github.io/mockery/l
 mockery
 ```
 
+### Generate protobuf
+Generate mocks from interfaces with [mockery](https://vektra.github.io/mockery/latest/installation/).
+```sh
+go generate ./...
+```
+
 ### Build
 ```sh
 go build -ldflags "-X go-backend-skeleton/app/cmd.version=v0.0.0" -o gbs

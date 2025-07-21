@@ -10,12 +10,12 @@ import "google/api/annotations.proto";
 //     --go_out=. \
 //     --go-grpc_out=. \
 //      --grpc-gateway_out=. \
-//      ./proto/helloworld.proto;
+//      ./proto/message.proto;
 
 // Defines the package name, which helps prevent naming conflicts.
 // The go_package option tells the Go protoc plugin where to write the generated
 // Go code.
-option go_package = "./pb";
+option go_package = "../pb";
 
 // The greeter service definition.
 service Message {
