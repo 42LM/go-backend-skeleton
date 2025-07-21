@@ -7,12 +7,6 @@ import (
 	pb "go-backend-skeleton/app/internal/transport/grpc/pb"
 )
 
-// protoc -I ./proto \
-//     --go_out=./proto --go_opt=paths=source_relative \
-//     --go-grpc_out=./proto --go-grpc_opt=paths=source_relative \
-//     --grpc-gateway_out=./proto --grpc-gateway_opt=paths=source_relative \
-//     ./proto/helloworld.proto;
-
 // Server is the gRPC server implementation. It is an INTERNAL component
 // that the HTTP gateway will call. It is not exposed to the public.
 type Server struct {

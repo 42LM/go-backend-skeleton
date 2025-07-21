@@ -13,15 +13,6 @@ import (
 	pb "go-backend-skeleton/app/internal/transport/grpc/pb"
 )
 
-// curl localhost:8081/ping
-// curl -X POST localhost:8081/v1/greeter/say_hello -d '{"name":"luke"}'
-
-// protoc -I ./proto \
-//     --go_out=./proto --go_opt=paths=source_relative \
-//     --go-grpc_out=./proto --go-grpc_opt=paths=source_relative \
-//     --grpc-gateway_out=./proto --grpc-gateway_opt=paths=source_relative \
-//     ./proto/helloworld.proto;
-
 // GRPCServeMux creates a grpc client,
 // creates a gateway multiplexer
 // and returns the multiplexer.
