@@ -7,6 +7,8 @@ import (
 	"time"
 )
 
+// TODO: to be able to change the logger easily provide struct that wraps logger and method that wraps logging. Than params does not need to be changed later.
+
 // NewSlogger creates a customized *slog.Logger.
 func NewSlogger() *slog.Logger {
 	opts := &slog.HandlerOptions{
