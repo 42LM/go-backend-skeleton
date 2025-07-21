@@ -28,11 +28,11 @@ func NewHandler(config HandlerConfig) http.Handler {
 	grpcServer := grpcmsg.New(config.MsgSvc)
 	grpcMux := grpc.GRPCServeMux(grpcServer)
 
+	mux.Use(loggingMiddleware(config.Logger))
+
 	// grpc gateway
 	mux.Handle("/rpc/", grpcMux)
 
-	// TODO: Create logging mw
-	// mux.Use(LoggingMiddleware)
 	mux.Prefix("/v1")
 	mux.HandleFunc("GET /none", httpnone.New(config.NoneSvc).HandlerFunc)
 	mux.HandleFunc("GET /msg/{id}", httpmsg.New(config.MsgSvc).HandlerFunc)

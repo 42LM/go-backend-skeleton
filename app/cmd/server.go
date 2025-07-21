@@ -41,6 +41,7 @@ var serverCmd = &cobra.Command{
 		// setup sub loggers for database and service layer
 		dbLogger := logger.With("layer", "database")
 		svcLogger := logger.With("layer", "service")
+		transportLogger := logger.With("layer", "http")
 
 		dynamodbClient, err := makeDynamoDBClient(dbLogger)
 		if err != nil {
@@ -67,6 +68,7 @@ var serverCmd = &cobra.Command{
 		handler := internalhttp.NewHandler(internalhttp.HandlerConfig{
 			NoneSvc: loggedNoneSvc,
 			MsgSvc:  loggedMsgSvc,
+			Logger:  transportLogger,
 		})
 
 		httpServer := http.Server{

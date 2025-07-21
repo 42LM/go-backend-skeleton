@@ -14,7 +14,6 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-// TODO: more love <3
 func Test_NoneHandler_FindNone(t *testing.T) {
 	t.Parallel()
 
