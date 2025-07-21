@@ -1,3 +1,4 @@
+// Package logging provides functionality to log.
 package logging
 
 import (
