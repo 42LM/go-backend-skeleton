@@ -3,7 +3,6 @@ package httpmsg
 
 import (
 	"context"
-	"log/slog"
 
 	"go-backend-skeleton/app/internal/svc/svcmsg"
 )
@@ -20,14 +19,12 @@ var _ MsgSvc = &svcmsg.MsgSvc{}
 // MsgHandler is the concrete struct of the message handler.
 // It wraps the service interface.
 type MsgHandler struct {
-	svc    MsgSvc
-	logger *slog.Logger
+	svc MsgSvc
 }
 
 // New returns a message handler.
-func New(s MsgSvc, l *slog.Logger) *MsgHandler {
+func New(s MsgSvc) *MsgHandler {
 	return &MsgHandler{
-		svc:    s,
-		logger: l,
+		svc: s,
 	}
 }

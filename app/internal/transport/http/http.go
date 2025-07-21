@@ -25,8 +25,8 @@ func NewHandler(config HandlerConfig) http.Handler {
 	// TODO: Create logging mw
 	// mux.Use(LoggingMiddleware)
 	mux.Prefix("/v1")
-	mux.HandleFunc("GET /none", httpnone.New(config.NoneSvc, config.Logger).HandlerFunc)
-	mux.HandleFunc("GET /msg/{id}", httpmsg.New(config.MsgSvc, config.Logger).HandlerFunc)
+	mux.HandleFunc("GET /none", httpnone.New(config.NoneSvc).HandlerFunc)
+	mux.HandleFunc("GET /msg/{id}", httpmsg.New(config.MsgSvc).HandlerFunc)
 
 	return mux
 }

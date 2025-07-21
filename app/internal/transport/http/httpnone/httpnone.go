@@ -3,7 +3,6 @@ package httpnone
 
 import (
 	"context"
-	"log/slog"
 
 	"go-backend-skeleton/app/internal/svc/svcnone"
 )
@@ -19,14 +18,12 @@ var _ NoneSvc = &svcnone.NoneSvc{}
 // NoneHandler is the concrete struct of the none handler.
 // It wraps the service interface.
 type NoneHandler struct {
-	svc    NoneSvc
-	logger *slog.Logger
+	svc NoneSvc
 }
 
 // New returns a none handler.
-func New(s NoneSvc, l *slog.Logger) *NoneHandler {
+func New(s NoneSvc) *NoneHandler {
 	return &NoneHandler{
-		svc:    s,
-		logger: l,
+		svc: s,
 	}
 }
