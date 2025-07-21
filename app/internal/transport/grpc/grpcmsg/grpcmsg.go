@@ -1,7 +1,6 @@
 package grpcmsg
 
 import (
-	"go-backend-skeleton/app/internal/svc/svcmsg"
 	"go-backend-skeleton/app/internal/transport"
 	pb "go-backend-skeleton/app/internal/transport/grpc/pb"
 )
@@ -22,9 +21,6 @@ type Server struct {
 
 	pb.UnimplementedGreeterServer
 }
-
-// Prove that the message service implements the MsgSvc interface
-var _ transport.MsgSvc = &svcmsg.MsgSvc{}
 
 // New returns a grpc server.
 func New(s transport.MsgSvc) *Server {

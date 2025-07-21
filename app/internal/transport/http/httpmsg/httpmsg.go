@@ -2,12 +2,8 @@
 package httpmsg
 
 import (
-	"go-backend-skeleton/app/internal/svc/svcmsg"
 	"go-backend-skeleton/app/internal/transport"
 )
-
-// Prove that the message service implements the MsgSvc interface
-var _ transport.MsgSvc = &svcmsg.MsgSvc{}
 
 // MsgHandler is the concrete struct of the message handler.
 // It wraps the service interface.
