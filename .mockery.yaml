@@ -19,6 +19,11 @@ packages:
       filename: mock_svc_msg.go
       dir: "app/internal/svc/mock"
       all: true
+  go-backend-skeleton/app/internal/transport/grpc/grpcmsg:
+    config:
+      filename: mock_svc_grpc_msg.go
+      dir: "app/internal/svc/mock"
+      all: true
   go-backend-skeleton/app/internal/transport/http/httpnone:
     config:
       filename: mock_svc_none.go

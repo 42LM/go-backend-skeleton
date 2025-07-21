@@ -1,0 +1,40 @@
+syntax = "proto3";
+
+import "google/api/annotations.proto";
+
+// GENERATE PROTO
+//
+// cd app/internal/transport/grpc
+//
+//  protoc -I ./proto \
+//     --go_out=. \
+//     --go-grpc_out=. \
+//      --grpc-gateway_out=. \
+//      ./proto/helloworld.proto;
+
+// Defines the package name, which helps prevent naming conflicts.
+// The go_package option tells the Go protoc plugin where to write the generated
+// Go code.
+option go_package = "./pb";
+
+package helloworld;
+
+// The greeter service definition.
+service Greeter {
+  rpc PutMsg(PutMsgRequest) returns (PutMsgReply) {
+    option (google.api.http) = {
+      post: "/rpc/msg/{id}"
+      body: "*"
+    };
+  }
+}
+
+message PutMsgRequest {
+  string id = 1;
+  string msg = 2;
+}
+
+message PutMsgReply {
+  string id = 1;
+  string msg = 2;
+}

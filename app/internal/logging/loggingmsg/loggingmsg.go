@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"go-backend-skeleton/app/internal/svc/svcmsg"
+	"go-backend-skeleton/app/internal/transport/grpc/grpcmsg"
 	"go-backend-skeleton/app/internal/transport/http/httpmsg"
 )
 
@@ -35,6 +36,18 @@ func (l *loggingRepo) Find(ctx context.Context, id string) string {
 	return l.next.Find(ctx, id)
 }
 
+func (l *loggingRepo) Put(ctx context.Context, id, msg string) error {
+	defer func(begin time.Time) {
+		l.logger.Info(
+			"Put",
+			"params.id", id,
+			"params.msg", msg,
+			"took", float64(time.Since(begin))/1e6,
+		)
+	}(time.Now())
+	return l.next.Put(ctx, id, msg)
+}
+
 // svc level logging
 
 type loggingSvc struct {
@@ -55,4 +68,25 @@ func (l *loggingSvc) FindMsg(ctx context.Context, id string) string {
 		)
 	}(time.Now())
 	return l.next.FindMsg(ctx, id)
+}
+
+type loggingGrpcSvc struct {
+	next   grpcmsg.MsgSvc
+	logger *slog.Logger
+}
+
+func NewLoggingGrpcSvc(next grpcmsg.MsgSvc, logger *slog.Logger) grpcmsg.MsgSvc {
+	return &loggingGrpcSvc{next: next, logger: logger}
+}
+
+func (l *loggingGrpcSvc) PutMsg(ctx context.Context, id, msg string) error {
+	defer func(begin time.Time) {
+		l.logger.Info(
+			"PutMsg",
+			"params.id", id,
+			"params.msg", msg,
+			"took", float64(time.Since(begin))/1e6,
+		)
+	}(time.Now())
+	return l.next.PutMsg(ctx, id, msg)
 }

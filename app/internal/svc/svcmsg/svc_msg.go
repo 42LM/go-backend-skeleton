@@ -13,6 +13,8 @@ import (
 type MsgRepo interface {
 	// Find loads the message and returns it.
 	Find(ctx context.Context, id string) string
+	// Put creates or updates a message.
+	Put(ctx context.Context, id, msg string) error
 }
 
 // Prove that the message repositroy implements the MsgRepo interface

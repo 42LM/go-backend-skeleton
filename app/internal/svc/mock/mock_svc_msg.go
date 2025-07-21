@@ -15,7 +15,8 @@ import (
 func NewMockMsgSvc(t interface {
 	mock.TestingT
 	Cleanup(func())
-}) *MockMsgSvc {
+},
+) *MockMsgSvc {
 	mock := &MockMsgSvc{}
 	mock.Mock.Test(t)
 
@@ -90,6 +91,69 @@ func (_c *MockMsgSvc_FindMsg_Call) Return(s string) *MockMsgSvc_FindMsg_Call {
 }
 
 func (_c *MockMsgSvc_FindMsg_Call) RunAndReturn(run func(ctx context.Context, id string) string) *MockMsgSvc_FindMsg_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// PutMsg provides a mock function for the type MockMsgSvc
+func (_mock *MockMsgSvc) PutMsg(ctx context.Context, id string, msg string) error {
+	ret := _mock.Called(ctx, id, msg)
+
+	if len(ret) == 0 {
+		panic("no return value specified for PutMsg")
+	}
+
+	var r0 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, string, string) error); ok {
+		r0 = returnFunc(ctx, id, msg)
+	} else {
+		r0 = ret.Error(0)
+	}
+	return r0
+}
+
+// MockMsgSvc_PutMsg_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'PutMsg'
+type MockMsgSvc_PutMsg_Call struct {
+	*mock.Call
+}
+
+// PutMsg is a helper method to define mock.On call
+//   - ctx context.Context
+//   - id string
+//   - msg string
+func (_e *MockMsgSvc_Expecter) PutMsg(ctx interface{}, id interface{}, msg interface{}) *MockMsgSvc_PutMsg_Call {
+	return &MockMsgSvc_PutMsg_Call{Call: _e.mock.On("PutMsg", ctx, id, msg)}
+}
+
+func (_c *MockMsgSvc_PutMsg_Call) Run(run func(ctx context.Context, id string, msg string)) *MockMsgSvc_PutMsg_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 string
+		if args[2] != nil {
+			arg2 = args[2].(string)
+		}
+		run(
+			arg0,
+			arg1,
+			arg2,
+		)
+	})
+	return _c
+}
+
+func (_c *MockMsgSvc_PutMsg_Call) Return(err error) *MockMsgSvc_PutMsg_Call {
+	_c.Call.Return(err)
+	return _c
+}
+
+func (_c *MockMsgSvc_PutMsg_Call) RunAndReturn(run func(ctx context.Context, id string, msg string) error) *MockMsgSvc_PutMsg_Call {
 	_c.Call.Return(run)
 	return _c
 }
