@@ -17,10 +17,8 @@ import "google/api/annotations.proto";
 // Go code.
 option go_package = "./pb";
 
-package helloworld;
-
 // The greeter service definition.
-service Greeter {
+service Message {
   rpc PutMsg(PutMsgRequest) returns (PutMsgReply) {
     option (google.api.http) = {
       post: "/rpc/msg/{id}"

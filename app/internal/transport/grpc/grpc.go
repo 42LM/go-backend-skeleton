@@ -25,14 +25,14 @@ import (
 // GRPCServeMux creates a grpc client,
 // creates a gateway multiplexer
 // and returns the multiplexer.
-func GRPCServeMux(srv pb.GreeterServer) *runtime.ServeMux {
+func GRPCServeMux(srv pb.MessageServer) *runtime.ServeMux {
 	// create in memory listener
 	// avoids openening a network port
 	const bufSize = 1024 * 1024
 	lis := bufconn.Listen(bufSize)
 
 	s := grpc.NewServer()
-	pb.RegisterGreeterServer(s, srv)
+	pb.RegisterMessageServer(s, srv)
 
 	log.Println("Starting internal-only gRPC service on in-memory buffer")
 	go func() {
@@ -60,7 +60,7 @@ func GRPCServeMux(srv pb.GreeterServer) *runtime.ServeMux {
 	// create gateway multiplexer
 	// this will handle all requests for our gRPC service
 	gwmux := runtime.NewServeMux()
-	err = pb.RegisterGreeterHandler(context.Background(), gwmux, conn)
+	err = pb.RegisterMessageHandler(context.Background(), gwmux, conn)
 	if err != nil {
 		log.Fatalf("failed to register gateway handler: %v", err)
 	}

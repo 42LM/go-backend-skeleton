@@ -18,7 +18,7 @@ import (
 type Server struct {
 	MsgSvc transport.MsgSvc
 
-	pb.UnimplementedGreeterServer
+	pb.UnimplementedMessageServer
 }
 
 // New returns a grpc server.

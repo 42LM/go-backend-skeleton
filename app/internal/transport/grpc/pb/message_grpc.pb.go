@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.5.1
 // - protoc             v5.29.3
-// source: helloworld.proto
+// source: message.proto
 
 package pb
 
@@ -19,107 +19,107 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	Greeter_PutMsg_FullMethodName = "/helloworld.Greeter/PutMsg"
+	Message_PutMsg_FullMethodName = "/Message/PutMsg"
 )
 
-// GreeterClient is the client API for Greeter service.
+// MessageClient is the client API for Message service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 //
 // The greeter service definition.
-type GreeterClient interface {
+type MessageClient interface {
 	PutMsg(ctx context.Context, in *PutMsgRequest, opts ...grpc.CallOption) (*PutMsgReply, error)
 }
 
-type greeterClient struct {
+type messageClient struct {
 	cc grpc.ClientConnInterface
 }
 
-func NewGreeterClient(cc grpc.ClientConnInterface) GreeterClient {
-	return &greeterClient{cc}
+func NewMessageClient(cc grpc.ClientConnInterface) MessageClient {
+	return &messageClient{cc}
 }
 
-func (c *greeterClient) PutMsg(ctx context.Context, in *PutMsgRequest, opts ...grpc.CallOption) (*PutMsgReply, error) {
+func (c *messageClient) PutMsg(ctx context.Context, in *PutMsgRequest, opts ...grpc.CallOption) (*PutMsgReply, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(PutMsgReply)
-	err := c.cc.Invoke(ctx, Greeter_PutMsg_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, Message_PutMsg_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-// GreeterServer is the server API for Greeter service.
-// All implementations must embed UnimplementedGreeterServer
+// MessageServer is the server API for Message service.
+// All implementations must embed UnimplementedMessageServer
 // for forward compatibility.
 //
 // The greeter service definition.
-type GreeterServer interface {
+type MessageServer interface {
 	PutMsg(context.Context, *PutMsgRequest) (*PutMsgReply, error)
-	mustEmbedUnimplementedGreeterServer()
+	mustEmbedUnimplementedMessageServer()
 }
 
-// UnimplementedGreeterServer must be embedded to have
+// UnimplementedMessageServer must be embedded to have
 // forward compatible implementations.
 //
 // NOTE: this should be embedded by value instead of pointer to avoid a nil
 // pointer dereference when methods are called.
-type UnimplementedGreeterServer struct{}
+type UnimplementedMessageServer struct{}
 
-func (UnimplementedGreeterServer) PutMsg(context.Context, *PutMsgRequest) (*PutMsgReply, error) {
+func (UnimplementedMessageServer) PutMsg(context.Context, *PutMsgRequest) (*PutMsgReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method PutMsg not implemented")
 }
-func (UnimplementedGreeterServer) mustEmbedUnimplementedGreeterServer() {}
-func (UnimplementedGreeterServer) testEmbeddedByValue()                 {}
+func (UnimplementedMessageServer) mustEmbedUnimplementedMessageServer() {}
+func (UnimplementedMessageServer) testEmbeddedByValue()                 {}
 
-// UnsafeGreeterServer may be embedded to opt out of forward compatibility for this service.
-// Use of this interface is not recommended, as added methods to GreeterServer will
+// UnsafeMessageServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to MessageServer will
 // result in compilation errors.
-type UnsafeGreeterServer interface {
-	mustEmbedUnimplementedGreeterServer()
+type UnsafeMessageServer interface {
+	mustEmbedUnimplementedMessageServer()
 }
 
-func RegisterGreeterServer(s grpc.ServiceRegistrar, srv GreeterServer) {
-	// If the following call pancis, it indicates UnimplementedGreeterServer was
+func RegisterMessageServer(s grpc.ServiceRegistrar, srv MessageServer) {
+	// If the following call pancis, it indicates UnimplementedMessageServer was
 	// embedded by pointer and is nil.  This will cause panics if an
 	// unimplemented method is ever invoked, so we test this at initialization
 	// time to prevent it from happening at runtime later due to I/O.
 	if t, ok := srv.(interface{ testEmbeddedByValue() }); ok {
 		t.testEmbeddedByValue()
 	}
-	s.RegisterService(&Greeter_ServiceDesc, srv)
+	s.RegisterService(&Message_ServiceDesc, srv)
 }
 
-func _Greeter_PutMsg_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Message_PutMsg_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(PutMsgRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(GreeterServer).PutMsg(ctx, in)
+		return srv.(MessageServer).PutMsg(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Greeter_PutMsg_FullMethodName,
+		FullMethod: Message_PutMsg_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(GreeterServer).PutMsg(ctx, req.(*PutMsgRequest))
+		return srv.(MessageServer).PutMsg(ctx, req.(*PutMsgRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-// Greeter_ServiceDesc is the grpc.ServiceDesc for Greeter service.
+// Message_ServiceDesc is the grpc.ServiceDesc for Message service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
-var Greeter_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "helloworld.Greeter",
-	HandlerType: (*GreeterServer)(nil),
+var Message_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "Message",
+	HandlerType: (*MessageServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
 			MethodName: "PutMsg",
-			Handler:    _Greeter_PutMsg_Handler,
+			Handler:    _Message_PutMsg_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "helloworld.proto",
+	Metadata: "message.proto",
 }
