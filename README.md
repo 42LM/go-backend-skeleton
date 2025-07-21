@@ -41,7 +41,11 @@ curl localhost:8080/v1/none
 ```
 
 ```sh
-curl localhost:8080/v1/msg/1
+curl localhost:8080/v1/msg/777
+```
+
+```sh
+curl -X POST localhost:8080/msg/777 -d '{"msg":"test-msg"}'
 ```
 
 ### Generate mocks

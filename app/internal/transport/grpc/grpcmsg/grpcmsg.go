@@ -1,3 +1,5 @@
+// Package grpcmsg provides a grpc server / client.
+// It exposes HTTP via grpc gateway.
 package grpcmsg
 
 import (
@@ -5,16 +7,13 @@ import (
 	pb "go-backend-skeleton/app/internal/transport/grpc/pb"
 )
 
-// curl localhost:8081/ping
-// curl -X POST localhost:8081/v1/greeter/say_hello -d '{"name":"luke"}'
-
 // protoc -I ./proto \
 //     --go_out=./proto --go_opt=paths=source_relative \
 //     --go-grpc_out=./proto --go-grpc_opt=paths=source_relative \
 //     --grpc-gateway_out=./proto --grpc-gateway_opt=paths=source_relative \
 //     ./proto/helloworld.proto;
 
-// server is the gRPC server implementation. It is an INTERNAL component
+// Server is the gRPC server implementation. It is an INTERNAL component
 // that the HTTP gateway will call. It is not exposed to the public.
 type Server struct {
 	MsgSvc transport.MsgSvc
