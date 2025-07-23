@@ -79,7 +79,7 @@ func Test_MsgRepo_Data_init(t *testing.T) {
 
 func buildMsgRepo(t *testing.T) *dynamodb.MsgRepository {
 	tableName := os.Getenv("DATABASE_AWS_DYNAMODB_MSG_TABLE")
-	repo := dynamodb.NewMsgRepository(dbClient, tableName, dbLogger)
+	repo := dynamodb.NewMsgRepository(dbClient, tableName)
 
 	err := dbClient.CreateTable(
 		context.Background(),

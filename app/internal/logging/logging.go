@@ -9,13 +9,13 @@ import (
 
 // LoggerWrapper is a wrapper for the logger of your choice.
 type LoggerWrapper struct {
-	logger *slog.Logger
+	Logger *slog.Logger
 }
 
 // New returns a logger wrapper.
 func New(l *slog.Logger) *LoggerWrapper {
 	return &LoggerWrapper{
-		logger: l,
+		Logger: l,
 	}
 }
 
@@ -28,7 +28,7 @@ func (l *LoggerWrapper) Log(
 	err error,
 ) {
 	defer func(begin time.Time) {
-		l.logger.Info(
+		l.Logger.Info(
 			method,
 			"params", params,
 			"results", results,

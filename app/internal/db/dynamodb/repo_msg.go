@@ -4,7 +4,6 @@ package dynamodb
 
 import (
 	"context"
-	"log/slog"
 )
 
 // MsgRepository persists messages in DynamoDB.
@@ -17,7 +16,6 @@ type MsgRepository struct {
 func NewMsgRepository(
 	client *DynamoDBClient,
 	tableName string,
-	logger *slog.Logger,
 ) *MsgRepository {
 	return &MsgRepository{client, tableName}
 }
