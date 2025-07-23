@@ -51,18 +51,18 @@ var serverCmd = &cobra.Command{
 		// TODO: refactor
 		// create repos and services and connect them with logging
 		noneRepo := none.NewNoneRepository()
-		loggedNoneRepo := loggingnone.NewLoggingRepo(noneRepo, dbLogger)
+		loggedNoneRepo := loggingnone.NewLoggingRepo(noneRepo, logging.New(dbLogger))
 		noneSvc := svcnone.New(&svcnone.NoneSvcConfig{
 			NoneRepo: loggedNoneRepo,
 		})
-		loggedNoneSvc := loggingnone.NewLoggingSvc(noneSvc, svcLogger)
+		loggedNoneSvc := loggingnone.NewLoggingSvc(noneSvc, logging.New(svcLogger))
 
 		msgRepo := dynamodb.NewMsgRepository(dynamodbClient, os.Getenv("DATABASE_AWS_DYNAMODB_MSG_TABLE"), dbLogger)
-		loggedMsgRepo := loggingmsg.NewLoggingRepo(msgRepo, dbLogger)
+		loggedMsgRepo := loggingmsg.NewLoggingRepo(msgRepo, logging.New(dbLogger))
 		msgSvc := svcmsg.New(&svcmsg.MsgSvcConfig{
 			MsgRepo: loggedMsgRepo,
 		})
-		loggedMsgSvc := loggingmsg.NewLoggingSvc(msgSvc, svcLogger)
+		loggedMsgSvc := loggingmsg.NewLoggingSvc(msgSvc, logging.New(svcLogger))
 
 		// create the main http handler with the services
 		handler := internalhttp.NewHandler(&internalhttp.HandlerConfig{

@@ -4,9 +4,8 @@ package loggingnone
 
 import (
 	"context"
-	"log/slog"
-	"time"
 
+	"go-backend-skeleton/app/internal/logging"
 	"go-backend-skeleton/app/internal/svc/svcnone"
 	"go-backend-skeleton/app/internal/transport/http/httpnone"
 )
@@ -15,20 +14,15 @@ import (
 
 type loggingRepo struct {
 	next   svcnone.NoneRepo
-	logger *slog.Logger
+	logger *logging.LoggerWrapper
 }
 
-func NewLoggingRepo(next svcnone.NoneRepo, logger *slog.Logger) svcnone.NoneRepo {
+func NewLoggingRepo(next svcnone.NoneRepo, logger *logging.LoggerWrapper) svcnone.NoneRepo {
 	return &loggingRepo{next: next, logger: logger}
 }
 
-func (l *loggingRepo) Find(ctx context.Context) string {
-	defer func(begin time.Time) {
-		l.logger.Info(
-			"Find",
-			"took", float64(time.Since(begin))/1e6,
-		)
-	}(time.Now())
+func (l *loggingRepo) Find(ctx context.Context) (res string) {
+	l.logger.Log("Put", nil, map[string]any{"results.none": res}, nil)
 	return l.next.Find(ctx)
 }
 
@@ -36,19 +30,14 @@ func (l *loggingRepo) Find(ctx context.Context) string {
 
 type loggingSvc struct {
 	next   httpnone.NoneSvc
-	logger *slog.Logger
+	logger *logging.LoggerWrapper
 }
 
-func NewLoggingSvc(next httpnone.NoneSvc, logger *slog.Logger) httpnone.NoneSvc {
+func NewLoggingSvc(next httpnone.NoneSvc, logger *logging.LoggerWrapper) httpnone.NoneSvc {
 	return &loggingSvc{next: next, logger: logger}
 }
 
-func (l *loggingSvc) FindNone(ctx context.Context) string {
-	defer func(begin time.Time) {
-		l.logger.Info(
-			"FindNone",
-			"took", float64(time.Since(begin))/1e6,
-		)
-	}(time.Now())
+func (l *loggingSvc) FindNone(ctx context.Context) (res string) {
+	l.logger.Log("Put", nil, map[string]any{"results.none": res}, nil)
 	return l.next.FindNone(ctx)
 }

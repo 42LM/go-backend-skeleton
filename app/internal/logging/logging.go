@@ -7,9 +7,38 @@ import (
 	"time"
 )
 
-// TODO: to be able to change the logger easily provide struct that wraps logger and method that wraps logging. Than params does not need to be changed later.
+// LoggerWrapper is a wrapper for the logger of your choice.
+type LoggerWrapper struct {
+	logger *slog.Logger
+}
 
-// NewSlogger creates a customized *slog.Logger.
+// New returns a logger wrapper.
+func New(l *slog.Logger) *LoggerWrapper {
+	return &LoggerWrapper{
+		logger: l,
+	}
+}
+
+// Log wraps the logging functionality of the underlaying logger
+// and will actually log things.
+func (l *LoggerWrapper) Log(
+	method string,
+	params map[string]any,
+	results map[string]any,
+	err error,
+) {
+	defer func(begin time.Time) {
+		l.logger.Info(
+			method,
+			"params", params,
+			"results", results,
+			"results.err", err,
+			"took", float64(time.Since(begin))/1e6,
+		)
+	}(time.Now())
+}
+
+// newSlogger creates a customized *slog.Logger.
 //
 // * level omitted
 // * message key renamed to method
@@ -36,15 +65,4 @@ func NewSlogger() *slog.Logger {
 	logger := slog.New(slog.NewJSONHandler(os.Stdout, opts))
 
 	return logger
-}
-
-func Log(l *slog.Logger, method string, params map[string]any) {
-	defer func(begin time.Time) {
-		l.Info(
-			"",
-			"method", method,
-			"params", params,
-			"took", float64(time.Since(begin))/1e6,
-		)
-	}(time.Now())
 }

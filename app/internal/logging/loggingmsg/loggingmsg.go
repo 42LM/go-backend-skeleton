@@ -4,7 +4,6 @@ package loggingmsg
 
 import (
 	"context"
-	"log/slog"
 
 	"go-backend-skeleton/app/internal/logging"
 	"go-backend-skeleton/app/internal/svc/svcmsg"
@@ -17,20 +16,20 @@ import (
 
 type loggingRepo struct {
 	next   svcmsg.MsgRepo
-	logger *slog.Logger
+	logger *logging.LoggerWrapper
 }
 
-func NewLoggingRepo(next svcmsg.MsgRepo, logger *slog.Logger) svcmsg.MsgRepo {
+func NewLoggingRepo(next svcmsg.MsgRepo, logger *logging.LoggerWrapper) svcmsg.MsgRepo {
 	return &loggingRepo{next: next, logger: logger}
 }
 
-func (l *loggingRepo) Find(ctx context.Context, id string) string {
-	logging.Log(l.logger, "Find", map[string]any{"params.id": id})
+func (l *loggingRepo) Find(ctx context.Context, id string) (res string) {
+	l.logger.Log("Find", map[string]any{"params.id": id}, map[string]any{"results.id": res}, nil)
 	return l.next.Find(ctx, id)
 }
 
-func (l *loggingRepo) Put(ctx context.Context, id, msg string) error {
-	logging.Log(l.logger, "Put", map[string]any{"params.id": id, "params.msg": msg})
+func (l *loggingRepo) Put(ctx context.Context, id, msg string) (err error) {
+	l.logger.Log("Put", map[string]any{"params.id": id, "params.msg": msg}, nil, err)
 	return l.next.Put(ctx, id, msg)
 }
 
@@ -38,19 +37,19 @@ func (l *loggingRepo) Put(ctx context.Context, id, msg string) error {
 
 type loggingSvc struct {
 	next   transport.MsgSvc
-	logger *slog.Logger
+	logger *logging.LoggerWrapper
 }
 
-func NewLoggingSvc(next transport.MsgSvc, logger *slog.Logger) transport.MsgSvc {
+func NewLoggingSvc(next transport.MsgSvc, logger *logging.LoggerWrapper) transport.MsgSvc {
 	return &loggingSvc{next: next, logger: logger}
 }
 
-func (l *loggingSvc) FindMsg(ctx context.Context, id string) string {
-	logging.Log(l.logger, "FindMsg", map[string]any{"params.id": id})
+func (l *loggingSvc) FindMsg(ctx context.Context, id string) (res string) {
+	l.logger.Log("FindMsg", map[string]any{"params.id": id}, map[string]any{"results.msg": res}, nil)
 	return l.next.FindMsg(ctx, id)
 }
 
-func (l *loggingSvc) PutMsg(ctx context.Context, id, msg string) error {
-	logging.Log(l.logger, "PutMsg", map[string]any{"params.id": id, "params.msg": msg})
+func (l *loggingSvc) PutMsg(ctx context.Context, id, msg string) (err error) {
+	l.logger.Log("PutMsg", map[string]any{"params.id": id, "params.msg": msg}, nil, err)
 	return l.next.PutMsg(ctx, id, msg)
 }
