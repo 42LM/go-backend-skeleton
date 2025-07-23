@@ -50,7 +50,7 @@ func Test_MsgHandler_FindMsg(t *testing.T) {
 			}
 
 			nopLogger := slog.New(slog.NewTextHandler(io.Discard, nil))
-			handler := http.NewHandler(http.HandlerConfig{
+			handler := http.NewHandler(&http.HandlerConfig{
 				MsgSvc: mockSvc,
 				Logger: nopLogger,
 			})

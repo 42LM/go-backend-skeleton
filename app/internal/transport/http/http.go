@@ -22,7 +22,7 @@ type HandlerConfig struct {
 
 // NewHandler creates a default *http.ServeMux and defines routes.
 // It returns an HTTP handler with middleware wired in.
-func NewHandler(config HandlerConfig) http.Handler {
+func NewHandler(config *HandlerConfig) http.Handler {
 	mux := muxify.NewMux()
 
 	grpcServer := grpcmsg.New(config.MsgSvc)

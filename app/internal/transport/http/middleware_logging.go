@@ -2,6 +2,7 @@ package http
 
 import (
 	"bytes"
+	"context"
 	"io"
 	"log/slog"
 	"net/http"
@@ -31,7 +32,9 @@ func loggingMiddleware(logger *slog.Logger) func(next http.Handler) http.Handler
 				)
 			}(time.Now())
 
-			next.ServeHTTP(w, r)
+			ctx := context.WithValue(r.Context(), "x", "X")
+
+			next.ServeHTTP(w, r.WithContext(ctx))
 		})
 	}
 }

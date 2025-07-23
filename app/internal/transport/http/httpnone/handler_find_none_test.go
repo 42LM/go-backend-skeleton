@@ -49,7 +49,7 @@ func Test_NoneHandler_FindNone(t *testing.T) {
 				tc.setupMock(mockSvc)
 			}
 			nopLogger := slog.New(slog.NewTextHandler(io.Discard, nil))
-			handler := http.NewHandler(http.HandlerConfig{
+			handler := http.NewHandler(&http.HandlerConfig{
 				NoneSvc: mockSvc,
 				Logger:  nopLogger,
 			})

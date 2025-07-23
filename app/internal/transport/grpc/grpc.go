@@ -21,12 +21,15 @@ import (
 // metadataAnnotator creates metadata for an outgoing request
 // by extracting the fields from the context.
 func metadataAnnotator(ctx context.Context, req *http.Request) metadata.MD {
-	// return metadata.New(map[string]string{
-	// 	"x": ctx.Value("x").(string),
-	// })
-	return metadata.New(map[string]string{
-		"foo": "bar",
-	})
+	md := metadata.New(map[string]string{})
+	x, ok := ctx.Value("x").(string)
+	if ok {
+		md.Set("x", x)
+	}
+
+	md.Set("foo", "bar")
+
+	return md
 }
 
 // GRPCServeMux creates a grpc client,
