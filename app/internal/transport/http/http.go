@@ -31,7 +31,7 @@ func NewHandler(config *HandlerConfig) http.Handler {
 	mux.Use(loggingMiddleware(config.Logger))
 
 	// grpc gateway
-	mux.Handle("/rpc/", grpcMux)
+	mux.Handle("/v2/", grpcMux)
 
 	mux.Prefix("/v1")
 	mux.HandleFunc("GET /none", httpnone.New(config.NoneSvc).HandlerFunc)

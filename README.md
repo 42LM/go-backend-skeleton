@@ -45,7 +45,7 @@ curl localhost:8080/v1/msg/777
 ```
 
 ```sh
-curl -X POST localhost:8080/rpc/msg/777 -d '{"msg":"test-msg"}'
+curl -X POST localhost:8080/v2/msg/777 -d '{"msg":"test-msg"}'
 ```
 
 ### Generate mocks + proto

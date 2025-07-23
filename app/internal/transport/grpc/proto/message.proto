@@ -21,7 +21,7 @@ option go_package = "../pb";
 service Message {
   rpc PutMsg(PutMsgRequest) returns (PutMsgReply) {
     option (google.api.http) = {
-      post: "/rpc/msg/{id}"
+      post: "/v2/msg/{id}"
       body: "*"
     };
   }

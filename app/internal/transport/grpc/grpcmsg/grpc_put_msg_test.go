@@ -58,7 +58,7 @@ func Test_GRPC_PutMsg(t *testing.T) {
 			// ⚠️ context set in miggleware_logging.go
 			// ctx := context.WithValue(context.Background(), "x", "X")
 
-			req, err := http.NewRequest("POST", fmt.Sprintf("%s/rpc/msg/1", httpSrv.URL), bodyReader)
+			req, err := http.NewRequest("POST", fmt.Sprintf("%s/v2/msg/1", httpSrv.URL), bodyReader)
 			require.NoError(t, err)
 			// req.Header.Set("Authorization", "Bearer the api secret")
 
