@@ -15,6 +15,7 @@ import (
 	"github.com/stretchr/testify/require"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
+	"google.golang.org/grpc/metadata"
 	"google.golang.org/grpc/test/bufconn"
 )
 
@@ -26,7 +27,7 @@ func Test_GRPC_PutMsg(t *testing.T) {
 	}{
 		"ok - no input struct set": {
 			setupMock: func(mockSvc *svcmock.MockMsgSvc) {
-				mockSvc.On("PutMsg", testifymock.Anything, "1", "test-msg").Return(nil).Once()
+				mockSvc.On("PutMsg", testifymock.Anything, "1", "test-msgX").Return(nil).Once()
 			},
 		},
 	}
@@ -42,7 +43,10 @@ func Test_GRPC_PutMsg(t *testing.T) {
 			conn := grpcClientConn(t, s)
 			client := pb.NewMessageClient(conn)
 
-			reply, err := client.PutMsg(context.Background(), &pb.PutMsgRequest{
+			md := metadata.New(map[string]string{"x": "X"})
+			ctx := metadata.NewOutgoingContext(context.Background(), md)
+
+			reply, err := client.PutMsg(ctx, &pb.PutMsgRequest{
 				Id:  "1",
 				Msg: "test-msg",
 			})
@@ -51,7 +55,7 @@ func Test_GRPC_PutMsg(t *testing.T) {
 			assert.Equal(t, "test-msg", reply.Msg)
 
 			if tc.setupMock != nil {
-				assert.True(t, mockSvc.AssertCalled(t, "PutMsg", testifymock.Anything, "1", "test-msg"))
+				assert.True(t, mockSvc.AssertCalled(t, "PutMsg", testifymock.Anything, "1", "test-msgX"))
 			}
 		})
 	}

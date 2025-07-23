@@ -7,14 +7,27 @@ import (
 	"context"
 	"log"
 	"net"
+	"net/http"
 
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
+	"google.golang.org/grpc/metadata"
 	"google.golang.org/grpc/test/bufconn"
 
 	pb "go-backend-skeleton/app/internal/transport/grpc/pb"
 )
+
+// metadataAnnotator creates metadata for an outgoing request
+// by extracting the fields from the context.
+func metadataAnnotator(ctx context.Context, req *http.Request) metadata.MD {
+	// return metadata.New(map[string]string{
+	// 	"x": ctx.Value("x").(string),
+	// })
+	return metadata.New(map[string]string{
+		"foo": "bar",
+	})
+}
 
 // GRPCServeMux creates a grpc client,
 // creates a gateway multiplexer
@@ -52,7 +65,9 @@ func GRPCServeMux(srv pb.MessageServer) *runtime.ServeMux {
 
 	// create gateway multiplexer
 	// this will handle all requests for our gRPC service
-	gwmux := runtime.NewServeMux()
+	gwmux := runtime.NewServeMux(
+		runtime.WithMetadata(metadataAnnotator),
+	)
 	err = pb.RegisterMessageHandler(context.Background(), gwmux, conn)
 	if err != nil {
 		log.Fatalf("failed to register gateway handler: %v", err)
