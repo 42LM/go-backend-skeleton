@@ -60,7 +60,10 @@ go build -ldflags "-X go-backend-skeleton/app/cmd.version=v0.0.0" -o gbs
 ```
 
 ### Troubleshoot
-Make sure the following is installed on your machine. For more info check [protobuf](https://github.com/golang/protobuf).
-* `brew install protobug`
-* `brew install protoc-gen-go`
-* `brew install protoc-gen-go-grpc`
+Make sure you install the go tools:
+```
+go install tool
+```
+
+Make sure the `protobuf` is installed on your machine. For more info check [protobuf](https://github.com/golang/protobuf).
+* `brew install protobuf`
