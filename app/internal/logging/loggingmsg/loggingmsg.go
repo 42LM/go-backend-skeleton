@@ -4,6 +4,7 @@ package loggingmsg
 
 import (
 	"context"
+	"time"
 
 	"go-backend-skeleton/app/internal/logging"
 	"go-backend-skeleton/app/internal/svc/svcmsg"
@@ -24,12 +25,12 @@ func NewLoggingRepo(next svcmsg.MsgRepo, logger *logging.LoggerWrapper) svcmsg.M
 }
 
 func (l *loggingRepo) Find(ctx context.Context, id string) (res string) {
-	l.logger.Log("Find", map[string]any{"params.id": id}, map[string]any{"results.id": res}, nil)
+	defer l.logger.Log("Find", map[string]any{"params.id": id}, map[string]any{"results.id": res}, nil)(time.Now())
 	return l.next.Find(ctx, id)
 }
 
 func (l *loggingRepo) Put(ctx context.Context, id, msg string) (err error) {
-	l.logger.Log("Put", map[string]any{"params.id": id, "params.msg": msg}, nil, err)
+	defer l.logger.Log("Put", map[string]any{"params.id": id, "params.msg": msg}, nil, err)(time.Now())
 	return l.next.Put(ctx, id, msg)
 }
 
@@ -45,11 +46,11 @@ func NewLoggingSvc(next transport.MsgSvc, logger *logging.LoggerWrapper) transpo
 }
 
 func (l *loggingSvc) FindMsg(ctx context.Context, id string) (res string) {
-	l.logger.Log("FindMsg", map[string]any{"params.id": id}, map[string]any{"results.msg": res}, nil)
+	defer l.logger.Log("FindMsg", map[string]any{"params.id": id}, map[string]any{"results.msg": res}, nil)(time.Now())
 	return l.next.FindMsg(ctx, id)
 }
 
 func (l *loggingSvc) PutMsg(ctx context.Context, id, msg string) (err error) {
-	l.logger.Log("PutMsg", map[string]any{"params.id": id, "params.msg": msg}, nil, err)
+	defer l.logger.Log("PutMsg", map[string]any{"params.id": id, "params.msg": msg}, nil, err)(time.Now())
 	return l.next.PutMsg(ctx, id, msg)
 }

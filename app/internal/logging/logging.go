@@ -26,8 +26,8 @@ func (l *LoggerWrapper) Log(
 	params map[string]any,
 	results map[string]any,
 	err error,
-) {
-	defer func(begin time.Time) {
+) func(time.Time) {
+	return func(begin time.Time) {
 		l.Logger.Info(
 			method,
 			"params", params,
@@ -35,7 +35,7 @@ func (l *LoggerWrapper) Log(
 			"results.err", err,
 			"took", float64(time.Since(begin))/1e6,
 		)
-	}(time.Now())
+	}
 }
 
 // newSlogger creates a customized *slog.Logger.
