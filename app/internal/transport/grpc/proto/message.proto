@@ -1,41 +1,144 @@
 syntax = "proto3";
 
 import "google/api/annotations.proto";
-
-// GENERATE PROTO
-//
-// cd app/internal/transport/grpc
-//
-   // protoc -I ./proto \
-   //    --go_out=. \
-   //    --go-grpc_out=. \
-   //     --grpc-gateway_out=. \
-   //     --openapi_out=fq_schema_naming=true,default_response=false:. \
-   //     ./proto/message.proto;
+import "protoc-gen-openapiv2/options/annotations.proto";
 
 // Defines the package name, which helps prevent naming conflicts.
 // The go_package option tells the Go protoc plugin where to write the generated
 // Go code.
 option go_package = "../pb";
 
-package pb;
+// https://swagger.io/docs/specification/v2_0/basic-structure/
+// https://grpc-ecosystem.github.io/grpc-gateway/docs/mapping/customizing_openapi_output/
+option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
+  info: {
+    title: "Example API";
+    version: "1.0";
+    license: {
+      name: "Who knows";
+      url: "deephole.com";
+    }
+    description: "Welcome to the Example REST API! The API follows standard REST principles, accepts JSON-formatted request bodies, and returns JSON-formatted responses.";
+    contact: {
+      name: "API Support";
+      url: "https://www.example.com/support";
+      email: "support@example.com";
+    }
+  };
 
-// The greeter service definition.
+  host: "api.example.com/";
+
+  schemes: [HTTPS];
+  consumes: ["application/json"];
+  produces: ["application/json"];
+
+  security_definitions: {
+    security: {
+      key: "bearer";
+      value: {
+        type: TYPE_API_KEY;
+        in: IN_HEADER;
+        name: "Authorization";
+        description: "Access is granted by providing a bearer access token in the headers.\n\n"
+          "**Example:** `Authorization: Bearer 123`";
+        }
+      }
+    }
+
+    security: {
+      security_requirement: {
+        key: "bearer";
+        value: {};
+      }
+    }
+};
+
+// Ignored for better schema names in the openapi docs.
+// If uncommented the schema names will have a `pb` prefix:
+//    e.g. `pb.PutMsgReply`.
+// package pb;
+
+// The message service definition.
 service Message {
+  option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_tag) = {
+    name: "Messages";
+    description: "Operations related to managing messages";
+  };
+
   rpc PutMsg(PutMsgRequest) returns (PutMsgReply) {
     option (google.api.http) = {
       post: "/v2/msg/{id}"
       body: "*"
     };
+
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "Put Message";
+      // tags: "Another Tag";
+      responses: {
+        key: "200";
+        value: {
+          description: "The successful response containing an `OK/200` http status with a `FindMsgReply` json response.";
+          schema: {
+            json_schema: {
+              ref: ".PutMsgReply";
+            }
+          }
+        }
+      }
+      responses: {
+        key: "404";
+        value: {
+          description: "The failed response containing a `NotFound/404` http status with a `NotFoundErrorResponse`.";
+          schema: {
+            json_schema: {
+              ref: ".NotFoundErrorResponse";
+              // ref: "google.rpc.Status";
+            }
+          }
+        }
+      }
+    };
   }
 }
 
+// The request for the `PutMsg` rpc endpoint.
 message PutMsgRequest {
+  // The message id.
   string id = 1;
+  // The message.
   string msg = 2;
 }
 
+// The response for the `PutMsg` rpc endpoint.
 message PutMsgReply {
+  // The message id.
   string id = 1;
+  // The message.
   string msg = 2;
+}
+
+// The response for a `NotFound/404` http status code.
+message NotFoundErrorResponse {
+  // The custom neoletter error code.
+  string code = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {
+      example: "\"not_found\""
+    }
+  ];
+  NotFoundErrorResponseDetails details = 2;
+  // The error message.
+  string error = 3 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {
+      example: "\"error message\"";
+    }
+  ];
+}
+
+// The not found error details for a `NotFound/404` http status code.
+message NotFoundErrorResponseDetails {
+  // The missing id of the not found entity.
+  string missing_id = 1 [
+    json_name = "missing_id",
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {
+      example: "\"55bb6628fd6e056055bb6628fd6e0560\"";
+    }
+  ];
 }

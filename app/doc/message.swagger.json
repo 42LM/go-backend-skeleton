@@ -1,0 +1,144 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Example API",
+    "description": "Welcome to the Example REST API! The API follows standard REST principles, accepts JSON-formatted request bodies, and returns JSON-formatted responses.",
+    "version": "1.0",
+    "contact": {
+      "name": "API Support",
+      "url": "https://www.example.com/support",
+      "email": "support@example.com"
+    },
+    "license": {
+      "name": "Who knows",
+      "url": "deephole.com"
+    }
+  },
+  "tags": [
+    {
+      "name": "Messages",
+      "description": "Operations related to managing messages"
+    }
+  ],
+  "host": "api.example.com/",
+  "schemes": [
+    "https"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/v2/msg/{id}": {
+      "post": {
+        "summary": "Put Message",
+        "operationId": "Message_PutMsg",
+        "responses": {
+          "200": {
+            "description": "The successful response containing an `OK/200` http status with a `FindMsgReply` json response.",
+            "schema": {
+              "$ref": "#/definitions/PutMsgReply"
+            }
+          },
+          "404": {
+            "description": "The failed response containing a `NotFound/404` http status with a `NotFoundErrorResponse`.",
+            "schema": {
+              "$ref": "#/definitions/NotFoundErrorResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "description": "The message id.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/MessagePutMsgBody"
+            }
+          }
+        ],
+        "tags": [
+          "Messages"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "MessagePutMsgBody": {
+      "type": "object",
+      "properties": {
+        "msg": {
+          "type": "string",
+          "description": "The message."
+        }
+      },
+      "description": "The request for the `PutMsg` rpc endpoint."
+    },
+    "NotFoundErrorResponse": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "string",
+          "example": "not_found",
+          "description": "The custom neoletter error code."
+        },
+        "details": {
+          "$ref": "#/definitions/NotFoundErrorResponseDetails"
+        },
+        "error": {
+          "type": "string",
+          "example": "error message",
+          "description": "The error message."
+        }
+      },
+      "description": "The response for a `NotFound/404` http status code."
+    },
+    "NotFoundErrorResponseDetails": {
+      "type": "object",
+      "properties": {
+        "missing_id": {
+          "type": "string",
+          "example": "55bb6628fd6e056055bb6628fd6e0560",
+          "description": "The missing id of the not found entity."
+        }
+      },
+      "description": "The not found error details for a `NotFound/404` http status code."
+    },
+    "PutMsgReply": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "The message id."
+        },
+        "msg": {
+          "type": "string",
+          "description": "The message."
+        }
+      },
+      "description": "The response for the `PutMsg` rpc endpoint."
+    }
+  },
+  "securityDefinitions": {
+    "bearer": {
+      "type": "apiKey",
+      "description": "Access is granted by providing a bearer access token in the headers.\n\n**Example:** `Authorization: Bearer 123`",
+      "name": "Authorization",
+      "in": "header"
+    }
+  },
+  "security": [
+    {
+      "bearer": []
+    }
+  ]
+}

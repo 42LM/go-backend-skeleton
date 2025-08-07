@@ -19,14 +19,14 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	Message_PutMsg_FullMethodName = "/pb.Message/PutMsg"
+	Message_PutMsg_FullMethodName = "/Message/PutMsg"
 )
 
 // MessageClient is the client API for Message service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 //
-// The greeter service definition.
+// The message service definition.
 type MessageClient interface {
 	PutMsg(ctx context.Context, in *PutMsgRequest, opts ...grpc.CallOption) (*PutMsgReply, error)
 }
@@ -53,7 +53,7 @@ func (c *messageClient) PutMsg(ctx context.Context, in *PutMsgRequest, opts ...g
 // All implementations must embed UnimplementedMessageServer
 // for forward compatibility.
 //
-// The greeter service definition.
+// The message service definition.
 type MessageServer interface {
 	PutMsg(context.Context, *PutMsgRequest) (*PutMsgReply, error)
 	mustEmbedUnimplementedMessageServer()
@@ -112,7 +112,7 @@ func _Message_PutMsg_Handler(srv interface{}, ctx context.Context, dec func(inte
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var Message_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "pb.Message",
+	ServiceName: "Message",
 	HandlerType: (*MessageServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{

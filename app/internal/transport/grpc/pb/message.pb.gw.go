@@ -92,7 +92,7 @@ func RegisterMessageHandlerServer(ctx context.Context, mux *runtime.ServeMux, se
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/pb.Message/PutMsg", runtime.WithHTTPPathPattern("/v2/msg/{id}"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/.Message/PutMsg", runtime.WithHTTPPathPattern("/v2/msg/{id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -150,7 +150,7 @@ func RegisterMessageHandlerClient(ctx context.Context, mux *runtime.ServeMux, cl
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/pb.Message/PutMsg", runtime.WithHTTPPathPattern("/v2/msg/{id}"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/.Message/PutMsg", runtime.WithHTTPPathPattern("/v2/msg/{id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return

@@ -10,5 +10,9 @@ do
     --go_out=../pb \
     --go-grpc_out=../pb \
     --grpc-gateway_out=../pb \
+    --openapiv2_out=../../../../doc   \
+    --openapiv2_opt=disable_default_errors=true \
     $proto
 done
+
+rm ../../../../doc/error.swagger.json
