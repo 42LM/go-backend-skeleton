@@ -6,16 +6,19 @@ import "google/api/annotations.proto";
 //
 // cd app/internal/transport/grpc
 //
-//  protoc -I ./proto \
-//     --go_out=. \
-//     --go-grpc_out=. \
-//      --grpc-gateway_out=. \
-//      ./proto/message.proto;
+   // protoc -I ./proto \
+   //    --go_out=. \
+   //    --go-grpc_out=. \
+   //     --grpc-gateway_out=. \
+   //     --openapi_out=fq_schema_naming=true,default_response=false:. \
+   //     ./proto/message.proto;
 
 // Defines the package name, which helps prevent naming conflicts.
 // The go_package option tells the Go protoc plugin where to write the generated
 // Go code.
 option go_package = "../pb";
+
+package pb;
 
 // The greeter service definition.
 service Message {

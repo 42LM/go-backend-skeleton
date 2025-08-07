@@ -19,7 +19,7 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	Message_PutMsg_FullMethodName = "/Message/PutMsg"
+	Message_PutMsg_FullMethodName = "/pb.Message/PutMsg"
 )
 
 // MessageClient is the client API for Message service.
@@ -112,7 +112,7 @@ func _Message_PutMsg_Handler(srv interface{}, ctx context.Context, dec func(inte
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var Message_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "Message",
+	ServiceName: "pb.Message",
 	HandlerType: (*MessageServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{

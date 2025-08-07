@@ -18,18 +18,23 @@ import (
 	pb "go-backend-skeleton/app/internal/transport/grpc/pb"
 )
 
-// metadataAnnotator creates metadata for an outgoing request
-// by extracting the fields from the context.
-func metadataAnnotator(ctx context.Context, req *http.Request) metadata.MD {
-	md := metadata.New(map[string]string{})
-	x, ok := ctx.Value("x").(string)
-	if ok {
-		md.Set("x", x)
+type MetaData struct {
+	X   string
+	Foo string
+}
+
+// MetaDataFromContext retreives the grpc metadata object from the http context.
+// It returns a wrapper that provides the extracted fields of the context.
+func MetaDataFromContext(ctx context.Context) MetaData {
+	md, ok := metadata.FromIncomingContext(ctx)
+	if !ok {
+		return MetaData{}
 	}
 
-	md.Set("foo", "bar")
-
-	return md
+	return MetaData{
+		X:   getMetaDataItem(md, "x"),
+		Foo: getMetaDataItem(md, "foo"),
+	}
 }
 
 // GRPCServeMux creates a grpc client,
@@ -70,6 +75,7 @@ func GRPCServeMux(srv pb.MessageServer) *runtime.ServeMux {
 	// this will handle all requests for our gRPC service
 	gwmux := runtime.NewServeMux(
 		runtime.WithMetadata(metadataAnnotator),
+		runtime.WithErrorHandler(CustomHTTPErrorHandler),
 	)
 	err = pb.RegisterMessageHandler(context.Background(), gwmux, conn)
 	if err != nil {
@@ -77,4 +83,30 @@ func GRPCServeMux(srv pb.MessageServer) *runtime.ServeMux {
 	}
 
 	return gwmux
+}
+
+// metadataAnnotator creates metadata for an outgoing request
+// by extracting the fields from the context.
+func metadataAnnotator(ctx context.Context, req *http.Request) metadata.MD {
+	md := metadata.New(map[string]string{})
+	x, ok := ctx.Value("x").(string)
+	if ok {
+		md.Set("x", x)
+	}
+
+	md.Set("foo", "bar")
+
+	return md
+}
+
+// getMetaDataItem is a helper function to retreive a metadata value by a given key.
+func getMetaDataItem(md metadata.MD, metaDataKey string) string {
+	var metaDataValue string
+
+	getMetaDataValue := md.Get(metaDataKey)
+	if getMetaDataValue != nil {
+		metaDataValue = getMetaDataValue[0]
+	}
+
+	return metaDataValue
 }

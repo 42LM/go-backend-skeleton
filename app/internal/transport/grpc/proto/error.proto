@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+option go_package = "../pb";
+
+package pb;
+
+message Error {
+  repeated ValidationErrorDetails validation_error_details = 1;
+  NotFoundErrorDetails not_found_error_details = 2;
+}
+
+message ValidationErrorDetails {
+  string reason = 1;
+  string field = 2;
+  string message = 3;
+}
+
+message NotFoundErrorDetails {
+  string id = 1;
+  string type = 2;
+}
+

@@ -3,6 +3,7 @@ package grpcmsg_test
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"log/slog"
@@ -31,12 +32,19 @@ func Test_GRPC_PutMsg(t *testing.T) {
 	mockSvc := svcmock.NewMockMsgSvc(t)
 
 	testCases := map[string]struct {
-		setupMock func(mockSvc *svcmock.MockMsgSvc)
+		setupMock            func(mockSvc *svcmock.MockMsgSvc)
+		expInternalServerErr bool
 	}{
 		"ok - no input struct set": {
 			setupMock: func(mockSvc *svcmock.MockMsgSvc) {
 				mockSvc.On("PutMsg", testifymock.Anything, "1", "test-msgX").Return(nil).Twice()
 			},
+		},
+		"error - internal server error": {
+			setupMock: func(mockSvc *svcmock.MockMsgSvc) {
+				mockSvc.On("PutMsg", testifymock.Anything, "1", "test-msgX").Return(errors.New("oops")).Twice()
+			},
+			expInternalServerErr: true,
 		},
 	}
 	for name, tc := range testCases {
@@ -69,11 +77,18 @@ func Test_GRPC_PutMsg(t *testing.T) {
 			body, err := io.ReadAll(httpResp.Body)
 			require.NoError(t, err)
 
-			var resp pb.PutMsgReply
-			err = json.Unmarshal(body, &resp)
+			var msgResp map[string]any
+			err = json.Unmarshal(body, &msgResp)
 			require.NoError(t, err)
-			assert.Equal(t, "1", resp.Id)
-			assert.Equal(t, "test-msg", resp.Msg)
+			if tc.expInternalServerErr {
+				assert.Equal(t, http.StatusInternalServerError, httpResp.StatusCode)
+				assert.Equal(t, float64(500), msgResp["code"])
+				assert.Equal(t, "internal server error", msgResp["message"])
+			} else {
+				assert.Equal(t, http.StatusOK, httpResp.StatusCode)
+				assert.Equal(t, "1", msgResp["id"])
+				assert.Equal(t, "test-msg", msgResp["msg"])
+			}
 
 			// grpc contract
 			s := grpc.NewServer()
@@ -89,9 +104,12 @@ func Test_GRPC_PutMsg(t *testing.T) {
 				Id:  "1",
 				Msg: "test-msg",
 			})
-			require.NoError(t, err)
-			assert.Equal(t, "1", reply.Id)
-			assert.Equal(t, "test-msg", reply.Msg)
+			if tc.expInternalServerErr {
+				assert.EqualError(t, err, "rpc error: code = Internal desc = grpc.PutMsg: error: oops")
+			} else {
+				assert.Equal(t, "1", reply.Id)
+				assert.Equal(t, "test-msg", reply.Msg)
+			}
 
 			if tc.setupMock != nil {
 				assert.True(t, mockSvc.AssertCalled(t, "PutMsg", testifymock.Anything, "1", "test-msgX"))
@@ -99,7 +117,7 @@ func Test_GRPC_PutMsg(t *testing.T) {
 		})
 	}
 	assert.True(t, mockSvc.AssertExpectations(t))
-	assert.True(t, mockSvc.AssertNumberOfCalls(t, "PutMsg", 2))
+	assert.True(t, mockSvc.AssertNumberOfCalls(t, "PutMsg", 4))
 }
 
 // grpcClientConn constructs an in-memory gRPC connection which has all networking involved.
